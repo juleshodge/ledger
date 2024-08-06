@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ledger</string>
+    <string name="weight_too_low">Weight value is too low</string>
+    <string name="weight_incompete">Weight incompete</string>
+</resources>
