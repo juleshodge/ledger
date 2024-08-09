@@ -5,4 +5,5 @@ enum class WeightExtras(val displayName: String) {
     Boots("Boots"),
     Jacket("Jacket"),
     FullClothes("Clothes"),
+    Fed("Fed"),
 }

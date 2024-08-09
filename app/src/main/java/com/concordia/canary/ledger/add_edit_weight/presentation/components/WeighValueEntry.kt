@@ -3,7 +3,6 @@ package com.concordia.canary.ledger.add_edit_weight.presentation.components
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -16,7 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -30,34 +28,32 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.concordia.canary.ledger.WeightEditParams
 import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
-import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.WeightEntryViewModel
 import com.concordia.canary.ledger.util.UiText
 
 
 @Composable
 fun WeighValueEntry(
     modifier: Modifier = Modifier,
-
-    viewModel: WeightEntryViewModel = hiltViewModel()
+    viewModelParams: WeightEditParams
 ) {
 
     WeighValueContainer(
-
-        weight = { viewModel.entryState.weightValue },
-        unitAbbreviation = { viewModel.entryState.weightUnits },
+        modifier = modifier,
+        weight = { viewModelParams.weightValue() },
+        unitAbbreviation = { viewModelParams.weightUnits() },
         isWeightError = {
-            !viewModel.entryState.weightValueValid
+            !viewModelParams.weightValueValid()
         },
         weightErrorMessage = {
-            viewModel.entryState.weightValueError
+            viewModelParams.weightValueError()
         },
-        weightValueUpdater = viewModel::onWeightValueChanged,
+        weightValueUpdater = viewModelParams.weightValueUpdate,
 
-        inputUnitsUpdater = viewModel::onUnitsChanged,
+        inputUnitsUpdater = viewModelParams.onUnitsChanged,
 
-        availableWeightUnits = { viewModel.entryState.availableUnits },
+        availableWeightUnits = { viewModelParams.availableWeightUnits() },
 
         )
 }
@@ -78,7 +74,7 @@ fun WeighValueContainer(
         mutableStateOf(false)
     }
 
-    Row() {
+    Row(modifier = modifier) {
         OutlinedTextField(
             value = weight(),
             onValueChange = { weightValueUpdater(it) },
@@ -166,8 +162,9 @@ fun WeighValueContainer(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewWeightEntry() {
+fun PreviewWeightEntry(modifier: Modifier = Modifier) {
     WeighValueContainer(
+        modifier = modifier,
         weight = { "171.2" },
         unitAbbreviation = { InputUnits.KgUnits },
         isWeightError = { true },

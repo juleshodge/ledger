@@ -11,18 +11,26 @@ data class Dimensions(
     val large: Dp
 )
 
-val smallDimensions = Dimensions(
-    small = 2.dp,
-    smallMedium = 4.dp,
-    medium = 6.dp,
-    mediumLarge = 9.dp,
-    large = 12.dp
-)
-
 val compactDimensions = Dimensions(
     small = 3.dp,
     smallMedium = 5.dp,
     medium = 8.dp,
     mediumLarge = 11.dp,
     large = 15.dp
+)
+
+val mediumDimensions = Dimensions(
+    small = 5.dp,
+    smallMedium = 8.dp,
+    medium = 11.dp,
+    mediumLarge = 15.dp,
+    large = 18.dp
+)
+
+val expandedDimensions = Dimensions(
+    small = 8.dp,
+    smallMedium = 11.dp,
+    medium = 15.dp,
+    mediumLarge = 20.dp,
+    large = 25.dp
 )

@@ -1,44 +1,56 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation.components
 
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Abc
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.WeightEntryViewModel
+import com.concordia.canary.ledger.R
+import com.concordia.canary.ledger.WeightEditParams
+import com.concordia.canary.ledger.util.UiText
 
 @Composable
-fun NotesEntry(viewModel: WeightEntryViewModel = hiltViewModel()) {
+fun NotesEntry(
+    modifier: Modifier = Modifier,
+    viewModelParams: WeightEditParams
+) {
 
     NotesEntryContainer(
         notesVal = {
-            viewModel.entryState.weightNotesValue
+            viewModelParams.weightNotesValue()
         },
-        valueChangeHandler = viewModel::onWeightValueNotesChanged
+        valueChangeHandler = viewModelParams.weightNotesValueUpdate,
+        modifier = modifier
     )
 }
 
 @Composable
 fun NotesEntryContainer(
     notesVal: () -> String,
-    valueChangeHandler: (String) -> Unit
+    valueChangeHandler: (String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     OutlinedTextField(
-        leadingIcon = { Icons.Filled.Abc },
+        modifier = modifier,
         value = notesVal(),
-        maxLines = 3,
-        singleLine = false,
+        placeholder = {
+            Text(
+                text = UiText.StringResource(R.string.weight_notes_placeholder_text).asString()
+            )
+        },
+        maxLines = 1,
+        singleLine = true,
         onValueChange = valueChangeHandler,
-
-
     )
 }
 
 @Composable
-@Preview
-fun PreviewNotesEntryContainer() {
-    NotesEntryContainer(notesVal = { "Some notes" }, valueChangeHandler = { TODO() })
+@Preview(showBackground = true)
+fun PreviewNotesEntryContainer(modifier: Modifier = Modifier) {
+    NotesEntryContainer(
+        modifier = modifier,
+        notesVal = { "a notes value" },
+        valueChangeHandler = { TODO() })
+
 }

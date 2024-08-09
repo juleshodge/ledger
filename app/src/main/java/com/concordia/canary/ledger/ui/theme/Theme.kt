@@ -10,62 +10,146 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.concordia.canary.ledger.util.LocalAppDimens
+import com.concordia.canary.ledger.util.LocalOrtMode
+import com.concordia.canary.ledger.util.LocalSize
+import com.concordia.canary.ledger.util.ProviderThemeUtil
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Teal80,
-    outline = Teal80,
-    primaryContainer = Teal30,
-    onPrimary = Teal20,
-    inversePrimary = Teal40,
-    onPrimaryContainer = Teal10,
-
-
-    secondary = Orange80,
-    secondaryContainer = Orange30,
-    onSecondary = Orange20,
-    onSecondaryContainer = Orange10,
-
-    tertiary = Indigo80,
-    tertiaryContainer = Indigo30
+private val lightScheme = lightColorScheme(
+    primary = primaryLight,
+    onPrimary = onPrimaryLight,
+    primaryContainer = primaryContainerLight,
+    onPrimaryContainer = onPrimaryContainerLight,
+    secondary = secondaryLight,
+    onSecondary = onSecondaryLight,
+    secondaryContainer = secondaryContainerLight,
+    onSecondaryContainer = onSecondaryContainerLight,
+    tertiary = tertiaryLight,
+    onTertiary = onTertiaryLight,
+    tertiaryContainer = tertiaryContainerLight,
+    onTertiaryContainer = onTertiaryContainerLight,
+    error = errorLight,
+    onError = onErrorLight,
+    errorContainer = errorContainerLight,
+    onErrorContainer = onErrorContainerLight,
+    background = backgroundLight,
+    onBackground = onBackgroundLight,
+    surface = surfaceLight,
+    onSurface = onSurfaceLight,
+    surfaceVariant = surfaceVariantLight,
+    onSurfaceVariant = onSurfaceVariantLight,
+    outline = outlineLight,
+    outlineVariant = outlineVariantLight,
+    scrim = scrimLight,
+    inverseSurface = inverseSurfaceLight,
+    inverseOnSurface = inverseOnSurfaceLight,
+    inversePrimary = inversePrimaryLight,
+    surfaceDim = surfaceDimLight,
+    surfaceBright = surfaceBrightLight,
+    surfaceContainerLowest = surfaceContainerLowestLight,
+    surfaceContainerLow = surfaceContainerLowLight,
+    surfaceContainer = surfaceContainerLight,
+    surfaceContainerHigh = surfaceContainerHighLight,
+    surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Teal40,
-    outline = Teal40,
-    primaryContainer = Teal90,
-    onPrimaryContainer = Teal10,
-    inversePrimary = Teal80,
-    onPrimary = Teal100,
-
-    secondary = Orange40,
-    secondaryContainer = Orange90,
-    onSecondaryContainer = Orange10,
-    onSecondary = Teal10,
-
-    tertiary = Indigo40,
-    tertiaryContainer = Indigo90
+private val darkScheme = darkColorScheme(
+    primary = primaryDark,
+    onPrimary = onPrimaryDark,
+    primaryContainer = primaryContainerDark,
+    onPrimaryContainer = onPrimaryContainerDark,
+    secondary = secondaryDark,
+    onSecondary = onSecondaryDark,
+    secondaryContainer = secondaryContainerDark,
+    onSecondaryContainer = onSecondaryContainerDark,
+    tertiary = tertiaryDark,
+    onTertiary = onTertiaryDark,
+    tertiaryContainer = tertiaryContainerDark,
+    onTertiaryContainer = onTertiaryContainerDark,
+    error = errorDark,
+    onError = onErrorDark,
+    errorContainer = errorContainerDark,
+    onErrorContainer = onErrorContainerDark,
+    background = backgroundDark,
+    onBackground = onBackgroundDark,
+    surface = surfaceDark,
+    onSurface = onSurfaceDark,
+    surfaceVariant = surfaceVariantDark,
+    onSurfaceVariant = onSurfaceVariantDark,
+    outline = outlineDark,
+    outlineVariant = outlineVariantDark,
+    scrim = scrimDark,
+    inverseSurface = inverseSurfaceDark,
+    inverseOnSurface = inverseOnSurfaceDark,
+    inversePrimary = inversePrimaryDark,
+    surfaceDim = surfaceDimDark,
+    surfaceBright = surfaceBrightDark,
+    surfaceContainerLowest = surfaceContainerLowestDark,
+    surfaceContainerLow = surfaceContainerLowDark,
+    surfaceContainer = surfaceContainerDark,
+    surfaceContainerHigh = surfaceContainerHighDark,
+    surfaceContainerHighest = surfaceContainerHighestDark,
 )
 
 @Composable
 fun LedgerTheme(
+    windowSize: WindowSizeType,
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        /*dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }*/
+        }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkScheme
+        else -> lightScheme
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = typographyCompact,
-        content = content
-    )
+    val orientation = when {
+        windowSize.width.size > windowSize.height.size -> Orientation.WIDER
+        else -> Orientation.TALLER
+    }
+
+    val mostSignificantDimension = when (orientation) {
+        Orientation.WIDER -> windowSize.width
+        else -> windowSize.height
+    }
+
+    val dimensions = when (mostSignificantDimension) {
+        is WindowSize.Compact -> compactDimensions
+        is WindowSize.Medium -> mediumDimensions
+        is WindowSize.Expanded -> expandedDimensions
+    }
+
+    val typography = when (mostSignificantDimension) {
+        is WindowSize.Compact -> typographyCompact
+        is WindowSize.Medium -> typographyMedium
+        is WindowSize.Expanded -> typographyExpanded
+    }
+
+    ProviderThemeUtil(dimensions = dimensions, orientation = orientation, windowSize = windowSize) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = typography,
+            content = content
+        )
+    }
+}
+
+object ResponsiveAppTheme {
+    val dimens: Dimensions
+        @Composable
+        get() = LocalAppDimens.current
+
+    val ortMode: Orientation
+        @Composable
+        get() = LocalOrtMode.current
+
+    val windowSize: WindowSizeType
+        @Composable
+        get() = LocalSize.current
 }
