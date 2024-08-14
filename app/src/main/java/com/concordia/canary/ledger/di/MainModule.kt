@@ -8,8 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import androidx.room.Database
-import androidx.room.RoomDatabase
 import androidx.room.Room
 
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.ValidateWeightUseCase
@@ -26,7 +24,7 @@ object MainModule {
     @Provides
     @Singleton
     fun providesValidateWeightUseCase(weightRepository: WeightRepository): ValidateWeightUseCase {
-        return ValidateWeightUseCase(weightRepository)
+        return ValidateWeightUseCase()
     }
 
     @Provides
