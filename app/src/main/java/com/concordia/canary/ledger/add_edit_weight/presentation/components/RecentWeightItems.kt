@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
+import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 
 @Composable
@@ -32,10 +33,13 @@ fun RecentWeightItems(weightVals: List<Weight>) {
     showBackground = true
 )
 fun PreviewRecentWeightItems() {
-    val weight1 = Weight(120.0, InputUnits.KgUnits)
-    val weight2 = Weight(122.0, InputUnits.KgUnits)
-    val weight3 = Weight(124.0, InputUnits.KgUnits)
-    val weight4 = Weight(128.0, InputUnits.KgUnits)
+    val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }
+
+
+    val weight1 = Weight(120.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight2 = Weight(122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight3 = Weight(124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight4 = Weight(128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
     val param = listOf(weight2, weight1, weight4, weight3)
     RecentWeightItems(param)
 }

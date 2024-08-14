@@ -4,6 +4,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Dimensions(
+    val verySmall: Dp,
     val small: Dp,
     val smallMedium: Dp,
     val medium: Dp,
@@ -12,6 +13,7 @@ data class Dimensions(
 )
 
 val compactDimensions = Dimensions(
+    verySmall = 1.dp,
     small = 3.dp,
     smallMedium = 5.dp,
     medium = 8.dp,
@@ -20,6 +22,7 @@ val compactDimensions = Dimensions(
 )
 
 val mediumDimensions = Dimensions(
+    verySmall = 2.dp,
     small = 5.dp,
     smallMedium = 8.dp,
     medium = 11.dp,
@@ -28,6 +31,7 @@ val mediumDimensions = Dimensions(
 )
 
 val expandedDimensions = Dimensions(
+    verySmall = 3.dp,
     small = 8.dp,
     smallMedium = 11.dp,
     medium = 15.dp,

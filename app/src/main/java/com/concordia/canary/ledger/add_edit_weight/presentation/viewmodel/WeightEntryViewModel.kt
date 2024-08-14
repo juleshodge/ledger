@@ -1,21 +1,28 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel
 
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
+import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
 import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightValidationType
+import com.concordia.canary.ledger.add_edit_weight.domain.use_case.AddNewWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.ValidateWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.presentation.state.WeightEntryState
 import com.concordia.canary.ledger.util.UiText
 
 @HiltViewModel
-class WeightEntryViewModel @Inject constructor(var validateWeightUseCase: ValidateWeightUseCase) :
+class WeightEntryViewModel @Inject constructor(
+    val validateWeightUseCase: ValidateWeightUseCase,
+    val addNewWeightUseCase: AddNewWeightUseCase
+) :
     ViewModel() {
 
 
@@ -55,6 +62,15 @@ class WeightEntryViewModel @Inject constructor(var validateWeightUseCase: Valida
     }
 
     fun onSavePressed() {
+        viewModelScope.launch {
+            val weightValue = entryState.weightValue.toDouble();
+
+            val extras: List<WeightExtras> = entryState.selectedExtras;
+
+            val newWeight =
+                Weight(weightValue, entryState.weightUnits, System.currentTimeMillis(), extras)
+            addNewWeightUseCase(newWeight)
+        }
 
     }
 

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -33,9 +32,11 @@ fun ExtrasSelectionEntry(
 
 ) {
 
-    OutlinedCard(modifier = modifier.padding(ResponsiveAppTheme.dimens.medium)) {
+    OutlinedCard(modifier = modifier.fillMaxWidth()) {
         Column(
-            modifier = Modifier.padding(ResponsiveAppTheme.dimens.medium),
+            modifier = modifier
+                .padding(ResponsiveAppTheme.dimens.medium)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -110,7 +111,7 @@ private fun ExtrasSelectionUiContainer(
 
     } else {
         Row(
-            modifier = modifier.wrapContentSize(),
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             availableWeightExtras().forEach { availExtra ->

@@ -25,6 +25,8 @@ import com.concordia.canary.ledger.ui.theme.rememberWindowSizeType
 import com.concordia.canary.ledger.util.UiText
 import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.add_edit_weight.presentation.state.RecentWeightsState
+import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.RecentWeightsViewModel
 
 
 @AndroidEntryPoint
@@ -38,6 +40,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
                     val viewModel: WeightEntryViewModel = hiltViewModel()
+                    val recentWeightsViewModel: RecentWeightsViewModel = hiltViewModel();
 
                     val ort = ResponsiveAppTheme.ortMode;
 
@@ -56,9 +59,16 @@ class MainActivity : ComponentActivity() {
                         weightNotesValueUpdate = viewModel::onWeightValueNotesChanged
                     )
 
+                    val recentParams =
+                        RecentWeightParams(
+                            loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
+                            recentState = { recentWeightsViewModel.recentsState })
+
                     WeightPane(
                         modifier = Modifier.padding(innerPadding),
-                        viewModelParams = params, ort
+                        viewModelParams = params,
+                        recentItems = recentParams,
+                        ort
                     )
                 }
             }
@@ -79,6 +89,11 @@ data class WeightEditParams(
     val availableWeightUnits: () -> List<InputUnits>,
     val weightNotesValue: () -> String,
     val weightNotesValueUpdate: (newNotesValue: String) -> Unit,
+)
+
+data class RecentWeightParams(
+    val loadRecentWeights: () -> Unit,
+    val recentState: () -> RecentWeightsState
 )
 
 
