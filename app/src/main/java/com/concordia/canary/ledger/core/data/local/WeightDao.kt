@@ -1,10 +1,9 @@
-package com.concordia.canary.ledger.add_edit_weight.data.local
+package com.concordia.canary.ledger.core.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.concordia.canary.ledger.add_edit_weight.data.local.entity.WeightEntity
 
 @Dao
 interface WeightDao {

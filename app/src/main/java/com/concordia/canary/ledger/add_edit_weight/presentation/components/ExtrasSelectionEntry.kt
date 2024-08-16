@@ -14,7 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.concordia.canary.ledger.R
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.ui.theme.LedgerTheme
 import com.concordia.canary.ledger.ui.theme.Orientation
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme

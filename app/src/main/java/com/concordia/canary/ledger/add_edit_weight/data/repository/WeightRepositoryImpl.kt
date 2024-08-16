@@ -5,7 +5,7 @@ import com.concordia.canary.ledger.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-import com.concordia.canary.ledger.add_edit_weight.data.local.WeightDao
+import com.concordia.canary.ledger.core.data.local.WeightDao
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
 import com.concordia.canary.ledger.add_edit_weight.domain.repository.WeightRepository
 

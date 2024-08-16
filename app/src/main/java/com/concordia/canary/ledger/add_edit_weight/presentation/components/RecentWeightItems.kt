@@ -6,9 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 
 @Composable

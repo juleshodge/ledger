@@ -1,6 +1,6 @@
 package com.concordia.canary.ledger.add_edit_weight.domain.use_case
 
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightValidationType
 
 class ValidateWeightUseCase() {

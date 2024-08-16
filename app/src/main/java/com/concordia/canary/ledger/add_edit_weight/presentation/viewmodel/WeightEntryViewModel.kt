@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.concordia.canary.ledger.R
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightValidationType
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.AddNewWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.ValidateWeightUseCase
@@ -71,7 +71,6 @@ class WeightEntryViewModel @Inject constructor(
                 Weight(weightValue, entryState.weightUnits, System.currentTimeMillis(), extras)
             addNewWeightUseCase(newWeight)
         }
-
     }
 
     private fun validateInputs() {

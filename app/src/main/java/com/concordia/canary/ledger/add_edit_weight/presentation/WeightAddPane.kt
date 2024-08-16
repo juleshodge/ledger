@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,8 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.concordia.canary.ledger.WeightEditParams
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.ExtrasSelectionEntry
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.NotesEntry
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.WeighValueEntry

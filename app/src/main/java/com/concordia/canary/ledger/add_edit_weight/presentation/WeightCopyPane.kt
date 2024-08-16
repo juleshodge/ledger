@@ -14,9 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.concordia.canary.ledger.RecentWeightParams
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.RecentWeightItems
 import com.concordia.canary.ledger.add_edit_weight.presentation.state.RecentWeightsState
 import com.concordia.canary.ledger.ui.theme.LedgerTheme

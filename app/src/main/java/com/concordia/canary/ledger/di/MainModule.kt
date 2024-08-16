@@ -11,11 +11,14 @@ import javax.inject.Singleton
 import androidx.room.Room
 
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.ValidateWeightUseCase
-import com.concordia.canary.ledger.add_edit_weight.data.WeightDatabase
+import com.concordia.canary.ledger.core.data.local.WeightDatabase
 import com.concordia.canary.ledger.add_edit_weight.data.repository.WeightRepositoryImpl
 import com.concordia.canary.ledger.add_edit_weight.domain.repository.WeightRepository
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.AddNewWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadRecentWeightsUseCase
+import com.concordia.canary.ledger.weight_trends.data.repository.WeightTrendRepositoryImpl
+import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
+import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,7 +26,7 @@ object MainModule {
 
     @Provides
     @Singleton
-    fun providesValidateWeightUseCase(weightRepository: WeightRepository): ValidateWeightUseCase {
+    fun providesValidateWeightUseCase(): ValidateWeightUseCase {
         return ValidateWeightUseCase()
     }
 
@@ -31,6 +34,12 @@ object MainModule {
     @Singleton
     fun provideAddNewWeightUseCase(weightRepository: WeightRepository): AddNewWeightUseCase {
         return AddNewWeightUseCase(weightRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWeightTrendRepositoryUseCase(weightTrendRepository: WeightTrendRepository): LoadUserWeightsUseCase {
+        return LoadUserWeightsUseCase(weightTrendRepository)
     }
 
     @Provides
@@ -57,5 +66,9 @@ object MainModule {
         return WeightRepositoryImpl(database.dao)
     }
 
-
+    @Provides
+    @Singleton
+    fun provideWeightTrendRepository(database: WeightDatabase): WeightTrendRepository {
+        return WeightTrendRepositoryImpl(database.dao)
+    }
 }

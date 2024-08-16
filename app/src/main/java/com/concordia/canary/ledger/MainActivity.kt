@@ -10,23 +10,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 
 import dagger.hilt.android.AndroidEntryPoint
 
 import com.concordia.canary.ledger.add_edit_weight.presentation.PreviewWeightPane
-import com.concordia.canary.ledger.add_edit_weight.presentation.WeightPane
-import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.WeightEntryViewModel
 import com.concordia.canary.ledger.ui.theme.LedgerTheme
-import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.ui.theme.WindowSize
 import com.concordia.canary.ledger.ui.theme.WindowSizeType
 import com.concordia.canary.ledger.ui.theme.rememberWindowSizeType
 import com.concordia.canary.ledger.util.UiText
-import com.concordia.canary.ledger.add_edit_weight.domain.model.InputUnits
-import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.state.RecentWeightsState
-import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.RecentWeightsViewModel
+import com.concordia.canary.ledger.util.Navigation
+import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrendsState
 
 
 @AndroidEntryPoint
@@ -37,44 +34,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSizeType = rememberWindowSizeType()
             LedgerTheme(windowSizeType) {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                ) { innerPadding ->
+                    Navigation(modifier = Modifier.padding(innerPadding))
 
-                    val viewModel: WeightEntryViewModel = hiltViewModel()
-                    val recentWeightsViewModel: RecentWeightsViewModel = hiltViewModel();
-
-                    val ort = ResponsiveAppTheme.ortMode;
-
-                    val params = WeightEditParams(
-                        onSavePressed = viewModel::onSavePressed,
-                        selectedExtras = { viewModel.entryState.selectedExtras },
-                        weightValueValid = { viewModel.entryState.weightValueValid },
-                        updateExtraSelection = viewModel::onWeightExtraSelected,
-                        weightUnits = { viewModel.entryState.weightUnits },
-                        weightValue = { viewModel.entryState.weightValue },
-                        weightValueError = { viewModel.entryState.weightValueError },
-                        weightValueUpdate = viewModel::onWeightValueChanged,
-                        onUnitsChanged = viewModel::onUnitsChanged,
-                        availableWeightUnits = { InputUnits.entries.toList() },
-                        weightNotesValue = { viewModel.entryState.weightNotesValue },
-                        weightNotesValueUpdate = viewModel::onWeightValueNotesChanged
-                    )
-
-                    val recentParams =
-                        RecentWeightParams(
-                            loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
-                            recentState = { recentWeightsViewModel.recentsState })
-
-                    WeightPane(
-                        modifier = Modifier.padding(innerPadding),
-                        viewModelParams = params,
-                        recentItems = recentParams,
-                        ort
-                    )
                 }
             }
         }
     }
 }
+
+data class TrendWeightParams(
+    val trendState: () -> WeightTrendsState,
+    val loadTrendWeights: () -> Unit,
+)
 
 data class WeightEditParams(
     val onSavePressed: () -> Unit,
