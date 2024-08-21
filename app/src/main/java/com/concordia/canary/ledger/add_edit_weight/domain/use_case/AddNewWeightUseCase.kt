@@ -5,6 +5,6 @@ import com.concordia.canary.ledger.add_edit_weight.domain.repository.WeightRepos
 
 class AddNewWeightUseCase(private val weightRepository: WeightRepository) {
     suspend operator fun invoke(newWeight: Weight) {
-        weightRepository.add(newWeight)
+        return weightRepository.add(newWeight)
     }
 }

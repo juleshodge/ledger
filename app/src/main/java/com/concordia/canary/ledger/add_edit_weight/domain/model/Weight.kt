@@ -18,7 +18,8 @@ data class Weight(
         return WeightEntity(
             weightVal = weightValue,
             weightUnits = units.unitNumeric,
-            obsDate = observationDate, weightExtras = displayList,
+            obsDate = observationDate,
+            weightExtras = displayList,
             createDate = System.currentTimeMillis(),
             notes = notes
         )

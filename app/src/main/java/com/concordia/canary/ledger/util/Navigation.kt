@@ -1,8 +1,15 @@
 package com.concordia.canary.ledger.util
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -47,7 +54,7 @@ fun Navigation(modifier: Modifier = Modifier) {
         composable(ScreenRoutes.WeightAddPane.route) {
             val viewModel: WeightEntryViewModel = hiltViewModel()
             val recentWeightsViewModel: RecentWeightsViewModel = hiltViewModel();
-
+            val context = LocalContext.current
             val ort = ResponsiveAppTheme.ortMode;
 
             val params = WeightEditParams(
@@ -62,12 +69,35 @@ fun Navigation(modifier: Modifier = Modifier) {
                 onUnitsChanged = viewModel::onUnitsChanged,
                 availableWeightUnits = { InputUnits.entries.toList() },
                 weightNotesValue = { viewModel.entryState.weightNotesValue },
-                weightNotesValueUpdate = viewModel::onWeightValueNotesChanged
+                weightNotesValueUpdate = viewModel::onWeightValueNotesChanged,
+                weightObsTimeValue = { viewModel.entryState.weightObsTime },
+                weightObsTimeValueUpdate = viewModel::onWeightObsTimeChange,
             )
 
             val recentParams =
                 RecentWeightParams(loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
                     recentState = { recentWeightsViewModel.recentsState })
+
+            LocalLifecycleOwner.current.lifecycleScope.launch {
+                viewModel.downStreamChan
+                    .collectLatest { value ->
+                        when (value) {
+                            is GeneralEvent.Error -> {
+                                Toast.makeText(
+                                    context,
+                                    value.errorMessage,
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                            }
+
+                            is GeneralEvent.NavToRoute -> {
+                                navController.navigate(ScreenRoutes.WeightTrendPane.route) {
+                                    popUpTo(0)
+                                }
+                            }
+                        }
+                    }
+            }
 
             WeightPane(
                 viewModelParams = params,

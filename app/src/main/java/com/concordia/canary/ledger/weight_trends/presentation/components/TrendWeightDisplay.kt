@@ -1,11 +1,11 @@
 package com.concordia.canary.ledger.weight_trends.presentation.components
 
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.util.Date
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -14,10 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
+import com.concordia.canary.ledger.core.presentation.components.DateTimeDisplay
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 
@@ -27,7 +27,7 @@ fun TrendWeightDisplay(trendWeight: TrendWeight) {
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp)
+            .padding(ResponsiveAppTheme.dimens.medium)
     ) {
 
         Column(
@@ -42,13 +42,7 @@ fun TrendWeightDisplay(trendWeight: TrendWeight) {
 
                 ) {
 
-                val dt = Instant.ofEpochMilli(trendWeight.observationDate)
-                val dte = Date.from(dt)
-
-
-                val formatter = SimpleDateFormat("dd MM yyyy HH:mm:ss")
-                val final = formatter.format(dte)
-                Text(text = final)
+                DateTimeDisplay(timeStamp = trendWeight.observationDate)
             }
             Text(
                 text = "${trendWeight.originalValue} ${trendWeight.originalWeightUnits.displayName}",
@@ -57,13 +51,13 @@ fun TrendWeightDisplay(trendWeight: TrendWeight) {
 
             if (!trendWeight.notes.isNullOrBlank()) {
                 Text(text = "${trendWeight.notes}")
+                Spacer(modifier = Modifier.height(ResponsiveAppTheme.dimens.medium))
             }
 
             TrentWeighExtrasDisplay(
                 currentSelections = { trendWeight.weightExtras },
                 availableWeightExtras = { WeightExtras.entries.toList() })
         }
-
     }
 }
 

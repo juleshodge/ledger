@@ -98,7 +98,10 @@ fun PreviewWeightPane(modifier: Modifier = Modifier) {
         weightValueUpdate = fun(s: String) {},
         weightValueError = { UiText.DynamicText("A error") },
         onUnitsChanged = fun(a: InputUnits) {},
-        weightNotesValue = { "a set of notes" }, weightNotesValueUpdate = fun(a: String) {}
+        weightNotesValue = { "a set of notes" },
+        weightObsTimeValue = { 1724001833775L },
+        weightObsTimeValueUpdate = {},
+        weightNotesValueUpdate = fun(a: String) {}
     )
 
     val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }

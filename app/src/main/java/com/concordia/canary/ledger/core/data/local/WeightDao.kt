@@ -11,6 +11,6 @@ interface WeightDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entity: WeightEntity)
 
-    @Query("SELECT * FROM weightentity")
+    @Query("SELECT * FROM weightentity ORDER By obsDate desc")
     suspend fun getAll() : List<WeightEntity>
 }

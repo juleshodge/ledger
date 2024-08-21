@@ -7,6 +7,7 @@ import com.concordia.canary.ledger.util.UiText
 data class WeightEntryState(
     val weightValue: String = "",
     val weightNotesValue: String = "",
+    val weightObsTime: Long = 0,
     val weightUnits: InputUnits = InputUnits.KgUnits,
     val weightValueValid: Boolean = false,
     val weightValueError: UiText? = null,

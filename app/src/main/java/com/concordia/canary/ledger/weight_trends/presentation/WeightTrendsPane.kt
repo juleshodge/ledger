@@ -41,21 +41,21 @@ fun PreviewWeightTrendsPane() {
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
-        observationDate = 0L,
+        observationDate = 1724185655790L,
         weightExtras = emptyList()
     )
     val weight2 = TrendWeight(
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
-        observationDate = 0L,
+        observationDate = 1724185655790L,
         weightExtras = WeightExtras.entries
     )
     val weight3 = TrendWeight(
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
-        observationDate = 0L,
+        observationDate = 1724185655790L,
         weightExtras = severalExtras
     )
 

@@ -5,6 +5,7 @@ enum class WeightValidationType {
     WEIGHT_TOO_HIGH,
     WEIGHT_INCOMPLETE,
     EMPTY_FIELD,
-    VALID
+    VALID,
+    OBS_TIME_INCOMPLETE
 
 }

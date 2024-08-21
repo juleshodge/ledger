@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.MonitorWeight
-import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -32,10 +31,6 @@ import androidx.compose.ui.unit.dp
 import com.concordia.canary.ledger.WeightEditParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.util.UiText
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
-import java.time.Instant
-import java.util.Date
 
 
 @Composable
@@ -79,22 +74,12 @@ fun WeighValueContainer(
         mutableStateOf(false)
     }
 
-    val timeInMillis = Instant.now().toEpochMilli()
 
     Row(modifier = modifier) {
-        val constraintBuilder = CalendarConstraints.Builder().setOpenAt(
-            timeInMillis //pass time in milli seconds
-        ).build()
-
-        val picker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select Date")
-            .setCalendarConstraints(constraintBuilder)
-            .build()
-
 
         OutlinedTextField(
             value = weight(),
-            onValueChange = { picker.showsDialog = true; weightValueUpdater(it) },
+            onValueChange = { weightValueUpdater(it) },
             textStyle = TextStyle.Default.copy(
                 textAlign = TextAlign.End
             ),

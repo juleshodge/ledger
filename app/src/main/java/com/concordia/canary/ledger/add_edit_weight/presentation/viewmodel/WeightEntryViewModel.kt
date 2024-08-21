@@ -16,7 +16,11 @@ import com.concordia.canary.ledger.add_edit_weight.domain.model.WeightValidation
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.AddNewWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.ValidateWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.presentation.state.WeightEntryState
+import com.concordia.canary.ledger.util.GeneralEvent
+import com.concordia.canary.ledger.util.ScreenRoutes
 import com.concordia.canary.ledger.util.UiText
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 
 @HiltViewModel
 class WeightEntryViewModel @Inject constructor(
@@ -25,10 +29,20 @@ class WeightEntryViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-
     var entryState by mutableStateOf(WeightEntryState())
         private set
 
+
+    private val _uiChan = Channel<GeneralEvent>()
+    val downStreamChan = _uiChan.receiveAsFlow()
+
+    fun onWeightObsTimeChange(newWeightTime: Long) {
+        entryState = entryState.copy(
+            weightObsTime = newWeightTime
+        )
+
+        validateInputs()
+    }
 
     fun onWeightValueChanged(newWeightValue: String) {
         entryState = entryState.copy(
@@ -68,8 +82,22 @@ class WeightEntryViewModel @Inject constructor(
             val extras: List<WeightExtras> = entryState.selectedExtras;
 
             val newWeight =
-                Weight(weightValue, entryState.weightUnits, System.currentTimeMillis(), extras)
-            addNewWeightUseCase(newWeight)
+                Weight(
+                    weightValue,
+                    entryState.weightUnits,
+                    entryState.weightObsTime,
+                    extras,
+                    notes = entryState.weightNotesValue
+                )
+
+            try {
+                addNewWeightUseCase(newWeight)
+            } catch (e: Exception) {
+                _uiChan.send(GeneralEvent.Error("Error Saving Weight: ${e.message}"))
+                return@launch
+            }
+
+            _uiChan.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 
@@ -104,6 +132,10 @@ class WeightEntryViewModel @Inject constructor(
                     entryState.copy(
                         weightValueValid = true
                     )
+            }
+
+            WeightValidationType.OBS_TIME_INCOMPLETE -> {
+                entryState = entryState.copy(weightValueValid = false)
             }
         }
     }

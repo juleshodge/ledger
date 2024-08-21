@@ -38,7 +38,6 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) { innerPadding ->
                     Navigation(modifier = Modifier.padding(innerPadding))
-
                 }
             }
         }
@@ -63,6 +62,8 @@ data class WeightEditParams(
     val availableWeightUnits: () -> List<InputUnits>,
     val weightNotesValue: () -> String,
     val weightNotesValueUpdate: (newNotesValue: String) -> Unit,
+    val weightObsTimeValue: () -> Long,
+    val weightObsTimeValueUpdate: (newObsTime: Long) -> Unit
 )
 
 data class RecentWeightParams(
