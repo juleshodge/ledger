@@ -5,4 +5,6 @@
     <string name="weight_notes_placeholder_text">Additional Notes</string>
     <string name="weight_extras_label">Extras</string>
     <string name="enter_weight_headline_str">Enter Weight</string>
+    <string name="update_weight_str">Update</string>
+    <string name="trends_title_str">Trends</string>
 </resources>

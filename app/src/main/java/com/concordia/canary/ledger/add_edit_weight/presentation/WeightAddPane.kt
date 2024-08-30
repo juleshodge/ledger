@@ -26,8 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.NoteEditParams
 import com.concordia.canary.ledger.R
-import com.concordia.canary.ledger.WeightEditParams
+import com.concordia.canary.ledger.WeightAddParams
+import com.concordia.canary.ledger.WeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.ExtrasSelectionEntry
@@ -42,7 +44,7 @@ import com.concordia.canary.ledger.util.UiText
 @Composable
 fun WeightAddPane(
     modifier: Modifier = Modifier,
-    viewModelParams: WeightEditParams,
+    viewModelParams: WeightAddParams,
     ort: Orientation
 ) {
     val availExtras by remember {
@@ -78,7 +80,7 @@ fun WeightAddPane(
                 ) {
                     Text(
                         text = stringResource(R.string.enter_weight_headline_str),
-                        style = MaterialTheme.typography.headlineLarge
+                        style = MaterialTheme.typography.displayLarge
                     )
 
                     HorizontalDivider()
@@ -86,10 +88,15 @@ fun WeightAddPane(
             }
 
         } else {
-            Text(
-                text = stringResource(R.string.enter_weight_headline_str),
-                style = MaterialTheme.typography.headlineLarge
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(R.string.enter_weight_headline_str),
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
         }
 
         Row(
@@ -102,14 +109,14 @@ fun WeightAddPane(
 
             WeighValueEntry(
                 modifier = Modifier.fillMaxWidth(.8f),
-                viewModelParams
+                viewModelParams.weightParams
             )
 
             Button(
                 onClick = {
                     viewModelParams.onSavePressed()
                 },
-                enabled = viewModelParams.weightValueValid(),
+                enabled = viewModelParams.weightParams.weightValueValid(),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Icon(
@@ -118,18 +125,19 @@ fun WeightAddPane(
                 )
             }
         }
-
-        TimeSpecificationEntry(
-            entryVal = { viewModelParams.weightObsTimeValue() },
-            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate(it) }
-        )
-
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text(
                 text = "OPTIONAL", style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+
+        TimeSpecificationEntry(
+            entryVal = { viewModelParams.weightObsTimeValue() },
+            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate(it) }
+        )
+
+
 
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             HorizontalDivider(
@@ -138,7 +146,7 @@ fun WeightAddPane(
             )
         }
 
-        NotesEntry(modifier = Modifier.fillMaxWidth(), viewModelParams)
+        NotesEntry(modifier = Modifier.fillMaxWidth(), viewModelParams.noteEditParams)
         Row(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -166,30 +174,35 @@ fun WeightAddPane(
 //@Preview(showBackground = true)
 @Composable
 fun PreviewWeightAddPane(modifier: Modifier = Modifier) {
-    val weightEditParams = WeightEditParams(onSavePressed = { TODO() },
+    val weightAddParams = WeightAddParams(
+        onSavePressed = { TODO() },
         selectedExtras = { WeightExtras.entries },
-        weightValue = { "122.2" },
+        weightParams = WeightParams(
+            weightValue = { "122.2" },
+            weightValueValid = { false },
+            weightUnits = { InputUnits.KgUnits },
+            availableWeightUnits = {
+                InputUnits.entries.toList()
+            },
+            weightValueUpdate = fun(s: String) {},
+            weightValueError = { UiText.DynamicText("A error") },
+            onUnitsChanged = fun(a: InputUnits) {},
+        ),
+
         updateExtraSelection = fun(
             weightExtra: WeightExtras,
             selectionVal: Boolean
         ) {
             weightExtra.displayName
         },
-        weightValueValid = { false },
-        weightUnits = { InputUnits.KgUnits },
-        availableWeightUnits = {
-            InputUnits.entries.toList()
-        },
-        weightValueUpdate = fun(s: String) {},
-        weightValueError = { UiText.DynamicText("A error") },
-        onUnitsChanged = fun(a: InputUnits) {},
+
         weightObsTimeValue = { 1724001833775L },
         weightObsTimeValueUpdate = {},
-        weightNotesValue = { "a set of notes" }, weightNotesValueUpdate = fun(a: String) {}
+        noteEditParams = NoteEditParams(weightNotesValue = { "" }, weightNotesValueUpdate = {}),
     )
 
     WeightAddPane(
-        viewModelParams = weightEditParams,
+        viewModelParams = weightAddParams,
         ort = Orientation.WIDER,
     )
 }

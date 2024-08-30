@@ -9,4 +9,6 @@ interface WeightRepository {
     suspend fun loadAll(): Flow<Resource<List<Weight>>>
 
     suspend fun add(weight: Weight)
+
+    suspend fun getById(id: Long): Flow<Resource<Weight>>
 }

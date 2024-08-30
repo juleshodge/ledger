@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.concordia.canary.ledger.WeightEditParams
+import com.concordia.canary.ledger.WeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.util.UiText
 
@@ -36,7 +36,7 @@ import com.concordia.canary.ledger.util.UiText
 @Composable
 fun WeighValueEntry(
     modifier: Modifier = Modifier,
-    viewModelParams: WeightEditParams
+    viewModelParams: WeightParams
 ) {
 
     WeighValueContainer(

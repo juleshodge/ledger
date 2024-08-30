@@ -1,6 +1,7 @@
 package com.concordia.canary.ledger.weight_trends.presentation.components
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +21,19 @@ import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.core.presentation.components.DateTimeDisplay
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
+import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
 
 @Composable
-fun TrendWeightDisplay(trendWeight: TrendWeight) {
+fun TrendWeightDisplay(
+    trendWeight: TrendWeight,
+    eventSendHandler: (TrendWeightEvent) -> Unit
+) {
 
     OutlinedCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(ResponsiveAppTheme.dimens.medium)
+            .clickable { eventSendHandler.invoke(TrendWeightEvent.NavToEdit(trendWeight.id!!)) }
     ) {
 
         Column(
@@ -65,6 +71,7 @@ fun TrendWeightDisplay(trendWeight: TrendWeight) {
 @Preview(showBackground = true)
 fun PreviewTrendWeightDisplay() {
     val trendWeight = TrendWeight(
+        5L,
         22.0,
         originalWeightUnits = InputUnits.KgUnits,
         currentWeightUnits = InputUnits.KgUnits,
@@ -73,5 +80,5 @@ fun PreviewTrendWeightDisplay() {
         observationDate = 1723832586660L,
         weightExtras = emptyList()
     )
-    TrendWeightDisplay(trendWeight)
+    TrendWeightDisplay(trendWeight, eventSendHandler = {})
 }

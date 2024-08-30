@@ -20,4 +20,10 @@ class WeightRepositoryImpl(private val dao: WeightDao) : WeightRepository {
         val toEntity = weight.toEntity()
         dao.insert(toEntity)
     }
+
+    override suspend fun getById(id: Long): Flow<Resource<Weight>> = flow {
+        emit(Resource.Loading())
+
+        emit(Resource.Success(dao.getById(id).toWeightModel()))
+    }
 }

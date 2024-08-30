@@ -23,6 +23,7 @@ import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.state.RecentWeightsState
 import com.concordia.canary.ledger.util.Navigation
+import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
 import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrendsState
 
 
@@ -47,24 +48,45 @@ class MainActivity : ComponentActivity() {
 data class TrendWeightParams(
     val trendState: () -> WeightTrendsState,
     val loadTrendWeights: () -> Unit,
+    val eventSendHandler: (TrendWeightEvent) -> Unit
 )
 
-data class WeightEditParams(
-    val onSavePressed: () -> Unit,
+data class WeightParams(
     val weightValue: () -> String,
     val weightValueUpdate: (newWeightValue: String) -> Unit,
     val weightValueError: () -> UiText?,
     val weightUnits: () -> InputUnits,
+    val onUnitsChanged: (InputUnits) -> Unit,
     val weightValueValid: () -> Boolean,
+    val availableWeightUnits: () -> List<InputUnits>,
+)
+
+data class WeightAddParams(
+    val onSavePressed: () -> Unit,
+    val weightParams: WeightParams,
     val selectedExtras: () -> List<WeightExtras>,
     val updateExtraSelection: (WeightExtras, Boolean) -> Unit,
-    val onUnitsChanged: (InputUnits) -> Unit,
-    val availableWeightUnits: () -> List<InputUnits>,
-    val weightNotesValue: () -> String,
-    val weightNotesValueUpdate: (newNotesValue: String) -> Unit,
+    val noteEditParams: NoteEditParams,
     val weightObsTimeValue: () -> Long,
     val weightObsTimeValueUpdate: (newObsTime: Long) -> Unit
 )
+
+data class NoteEditParams(
+    val weightNotesValue: () -> String,
+    val weightNotesValueUpdate: (newNotesValue: String) -> Unit
+)
+
+data class WeightEditParams(
+    val onUpdate: () -> Unit,
+    val onDelete: () -> Unit,
+    val onLoadWeightEntry: (weightId: Long) -> Unit,
+    val weightParams: WeightParams,
+    val selectedExtras: () -> List<WeightExtras>,
+    val updateExtraSelection: (WeightExtras, Boolean) -> Unit,
+    val noteEditParams: NoteEditParams,
+    val weightObsTimeValue: () -> Long
+)
+
 
 data class RecentWeightParams(
     val loadRecentWeights: () -> Unit,

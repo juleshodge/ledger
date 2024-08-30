@@ -67,10 +67,10 @@ fun PreviewWeightCopyPane() {
 
     val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }
 
-    val weight1 = Weight(122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight2 = Weight(123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight3 = Weight(124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight4 = Weight(128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight1 = Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight2 = Weight(null, 123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight3 = Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight4 = Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
     val param = listOf(weight2, weight1, weight4, weight3)
 
     val recentWeightsState = RecentWeightsState(

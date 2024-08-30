@@ -1,11 +1,18 @@
 package com.concordia.canary.ledger.weight_trends.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.TrendWeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
@@ -18,7 +25,6 @@ import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrends
 
 @Composable
 fun WeightTrendsPane(
-    weightAddClicked: () -> Unit,
     trendsStateParams: TrendWeightParams
 ) {
     LaunchedEffect(true) {
@@ -26,8 +32,18 @@ fun WeightTrendsPane(
     }
 
     Column {
-        Text(text = "Trends", style = MaterialTheme.typography.titleLarge)
-        TrendWeightList(trendsStateParams.trendState().trendWeights, weightAddClicked)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = stringResource(R.string.trends_title_str),
+                style = MaterialTheme.typography.displayLarge
+            )
+
+        }
+
+        TrendWeightList(trendsStateParams)
     }
 }
 
@@ -38,6 +54,7 @@ fun PreviewWeightTrendsPane() {
     val severalExtras = listOf(WeightExtras.Fed, WeightExtras.Shoes)
 
     val weight1 = TrendWeight(
+        1L,
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
@@ -45,6 +62,7 @@ fun PreviewWeightTrendsPane() {
         weightExtras = emptyList()
     )
     val weight2 = TrendWeight(
+        2L,
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
@@ -52,6 +70,7 @@ fun PreviewWeightTrendsPane() {
         weightExtras = WeightExtras.entries
     )
     val weight3 = TrendWeight(
+        3L,
         1.0,
         InputUnits.KgUnits,
         InputUnits.KgUnits,
@@ -66,13 +85,13 @@ fun PreviewWeightTrendsPane() {
     val weightTrendsState = WeightTrendsState(trendWeights = tempWeights, isLoading = false)
     val params = TrendWeightParams(
         trendState = { weightTrendsState },
-        loadTrendWeights = {}
+        loadTrendWeights = {},
+        eventSendHandler = {}
     )
 
 
     LedgerTheme(windowSizeType) {
         WeightTrendsPane(
-            weightAddClicked = {},
             trendsStateParams = params
         )
     }

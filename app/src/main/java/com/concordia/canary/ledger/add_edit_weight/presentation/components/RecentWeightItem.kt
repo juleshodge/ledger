@@ -94,7 +94,7 @@ fun PreviewRecentWeightItem() {
 
     val selections = WeightExtras.entries
 
-    val testWeight = Weight(155.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val testWeight = Weight(null, 155.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
     val windowSizeType = WindowSizeType(WindowSize.Compact(400), WindowSize.Compact(600))
     LedgerTheme(windowSizeType) {
         RecentWeightItem(testWeight)

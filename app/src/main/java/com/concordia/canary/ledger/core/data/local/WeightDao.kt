@@ -13,4 +13,7 @@ interface WeightDao {
 
     @Query("SELECT * FROM weightentity ORDER By obsDate desc")
     suspend fun getAll() : List<WeightEntity>
+
+    @Query("SELECT * FROM weightentity WHERE id =:weightId")
+    suspend fun getById(weightId: Long) : WeightEntity
 }

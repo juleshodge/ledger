@@ -20,6 +20,7 @@ data class WeightEntity(
     fun toWeightModel(): Weight {
         val unitFromNumeric = InputUnits.fromNumeric(weightUnits)
         return Weight(
+            weightId = id,
             weightVal,
             unitFromNumeric,
             obsDate,

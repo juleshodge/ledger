@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.NoteEditParams
 import com.concordia.canary.ledger.RecentWeightParams
-import com.concordia.canary.ledger.WeightEditParams
+import com.concordia.canary.ledger.WeightAddParams
+import com.concordia.canary.ledger.WeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
@@ -25,7 +27,7 @@ import com.concordia.canary.ledger.util.UiText
 @Composable
 fun WeightPane(
     modifier: Modifier = Modifier,
-    viewModelParams: WeightEditParams,
+    viewModelParams: WeightAddParams,
     recentItems: RecentWeightParams,
     ort: Orientation,
     weightAddNavBack: () -> Unit
@@ -81,36 +83,43 @@ fun WeightPane(
 @Composable
 fun PreviewWeightPane(modifier: Modifier = Modifier) {
 
-    val weightEditParams = WeightEditParams(onSavePressed = { TODO() },
+    val weightAddParams = WeightAddParams(
+        onSavePressed = { TODO() },
         selectedExtras = { WeightExtras.entries },
-        weightValue = { "122.2" },
+        weightParams = WeightParams(
+            weightValue = { "122.2" },
+            weightValueValid = { true },
+            weightUnits = { InputUnits.KgUnits },
+            availableWeightUnits = {
+                InputUnits.entries.toList()
+            },
+            weightValueUpdate = fun(s: String) {},
+            weightValueError = { UiText.DynamicText("A error") },
+            onUnitsChanged = fun(a: InputUnits) {},
+        ),
+
         updateExtraSelection = fun(
             weightExtra: WeightExtras,
             selectionVal: Boolean
         ) {
             weightExtra.displayName
         },
-        weightValueValid = { true },
-        weightUnits = { InputUnits.KgUnits },
-        availableWeightUnits = {
-            InputUnits.entries.toList()
-        },
-        weightValueUpdate = fun(s: String) {},
-        weightValueError = { UiText.DynamicText("A error") },
-        onUnitsChanged = fun(a: InputUnits) {},
-        weightNotesValue = { "a set of notes" },
+
+        noteEditParams = NoteEditParams(
+            weightNotesValue = { "some notes value" },
+            weightNotesValueUpdate = {}),
         weightObsTimeValue = { 1724001833775L },
         weightObsTimeValueUpdate = {},
-        weightNotesValueUpdate = fun(a: String) {}
-    )
+
+        )
 
     val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }
 
 
-    val weight1 = Weight(122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight2 = Weight(123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight3 = Weight(124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight4 = Weight(128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight1 = Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight2 = Weight(null, 123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight3 = Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight4 = Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
     val param = listOf(weight2, weight1, weight4, weight3)
 
     val recentWeightsState = RecentWeightsState(
@@ -125,7 +134,7 @@ fun PreviewWeightPane(modifier: Modifier = Modifier) {
 
     WeightPane(
         modifier = modifier,
-        viewModelParams = weightEditParams,
+        viewModelParams = weightAddParams,
         ort = Orientation.WIDER,
         recentItems = recentWeightParams,
         weightAddNavBack = {}

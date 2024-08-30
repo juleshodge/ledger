@@ -83,6 +83,7 @@ class WeightEntryViewModel @Inject constructor(
 
             val newWeight =
                 Weight(
+                    null,
                     weightValue,
                     entryState.weightUnits,
                     entryState.weightObsTime,
