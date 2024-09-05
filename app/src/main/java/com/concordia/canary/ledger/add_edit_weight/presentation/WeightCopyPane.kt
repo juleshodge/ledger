@@ -43,18 +43,20 @@ fun WeightCopyPane(
         if (recentItemsParams.recentState().isLoading) {
             Text(text = "Loading...")
         } else {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Recent Entries",
-                    modifier = Modifier.padding(top = ResponsiveAppTheme.dimens.small),
-                    style = MaterialTheme.typography.bodyLarge
-                )
+            if (recentItemsParams.recentState().recentWeights.isNotEmpty()) {
+                Column(
+                    modifier = modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Recent Entries",
+                        modifier = Modifier.padding(top = ResponsiveAppTheme.dimens.small),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-                RecentWeightItems(weightVals = recentItemsParams.recentState().recentWeights)
+                    RecentWeightItems(weightVals = recentItemsParams.recentState().recentWeights)
+                }
             }
         }
     }
@@ -67,10 +69,14 @@ fun PreviewWeightCopyPane() {
 
     val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }
 
-    val weight1 = Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight2 = Weight(null, 123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight3 = Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight4 = Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight1 =
+        Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, "", true)
+    val weight2 =
+        Weight(null, 123.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, "", true)
+    val weight3 =
+        Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, "", true)
+    val weight4 =
+        Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, "", true)
     val param = listOf(weight2, weight1, weight4, weight3)
 
     val recentWeightsState = RecentWeightsState(

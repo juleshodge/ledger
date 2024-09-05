@@ -7,6 +7,6 @@ import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRe
 
 class LoadUserWeightsUseCase(private val weightTrendRepository: WeightTrendRepository) {
     suspend fun invoke(): Flow<Resource<List<TrendWeight>>> {
-        return weightTrendRepository.loadAll()
+        return weightTrendRepository.loadAllActive()
     }
 }

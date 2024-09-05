@@ -36,10 +36,10 @@ fun PreviewRecentWeightItems() {
     val selections = WeightExtras.entries.filter { it -> it.name == "Boots" || it.name == "Fed" }
 
 
-    val weight1 = Weight(null, 120.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight2 = Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight3 = Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
-    val weight4 = Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val weight1 = Weight(null, 120.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, notes = null, active = true)
+    val weight2 = Weight(null, 122.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, notes = null, active = true)
+    val weight3 = Weight(null, 124.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, notes = null, active = true)
+    val weight4 = Weight(null, 128.0, InputUnits.KgUnits, System.currentTimeMillis(), selections, notes = null, active = true)
     val param = listOf(weight2, weight1, weight4, weight3)
     RecentWeightItems(param)
 }

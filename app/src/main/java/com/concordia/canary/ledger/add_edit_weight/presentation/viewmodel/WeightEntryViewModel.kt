@@ -8,6 +8,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
@@ -19,8 +21,7 @@ import com.concordia.canary.ledger.add_edit_weight.presentation.state.WeightEntr
 import com.concordia.canary.ledger.util.GeneralEvent
 import com.concordia.canary.ledger.util.ScreenRoutes
 import com.concordia.canary.ledger.util.UiText
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+
 
 @HiltViewModel
 class WeightEntryViewModel @Inject constructor(
@@ -46,7 +47,8 @@ class WeightEntryViewModel @Inject constructor(
 
     fun onWeightValueChanged(newWeightValue: String) {
         entryState = entryState.copy(
-            weightValue = newWeightValue
+            weightValue = newWeightValue,
+            changeMade = true
         )
 
         validateInputs()
@@ -54,12 +56,16 @@ class WeightEntryViewModel @Inject constructor(
 
     fun onWeightValueNotesChanged(newNotesVal: String) {
         entryState = entryState.copy(
-            weightNotesValue = newNotesVal
+            weightNotesValue = newNotesVal,
+            changeMade = true
         )
     }
 
     fun onUnitsChanged(newUnits: InputUnits) {
-        entryState = entryState.copy(weightUnits = newUnits)
+        entryState = entryState.copy(
+            weightUnits = newUnits,
+            changeMade = true
+        )
     }
 
     fun onWeightExtraSelected(weightExtra: WeightExtras, selectionVal: Boolean) {
@@ -88,7 +94,8 @@ class WeightEntryViewModel @Inject constructor(
                     entryState.weightUnits,
                     entryState.weightObsTime,
                     extras,
-                    notes = entryState.weightNotesValue
+                    notes = entryState.weightNotesValue,
+                    active = true
                 )
 
             try {
@@ -104,7 +111,11 @@ class WeightEntryViewModel @Inject constructor(
 
     private fun validateInputs() {
         val validateWeightUseCaseResult =
-            validateWeightUseCase(entryState.weightValue, entryState.weightUnits)
+            validateWeightUseCase(
+                entryState.weightValue,
+                entryState.weightUnits,
+                entryState.changeMade
+            )
 
         when (validateWeightUseCaseResult) {
             WeightValidationType.WEIGHT_TOO_LOW -> {

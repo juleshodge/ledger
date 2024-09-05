@@ -9,11 +9,14 @@ import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
 
 class WeightTrendRepositoryImpl(private val dao: WeightDao) : WeightTrendRepository {
-    override suspend fun loadAll(): Flow<Resource<List<TrendWeight>>> = flow {
+    override suspend fun loadAllActive(): Flow<Resource<List<TrendWeight>>> = flow {
         emit(Resource.Loading())
 
-        emit(Resource.Success(dao.getAll().map { entity ->
-            TrendWeight.entityMapper(entity)
-        }))
+        emit(Resource.Success(dao.getAll()
+            .filter { w -> w.active }
+            .map { entity ->
+                TrendWeight.entityMapper(entity)
+            })
+        )
     }
 }

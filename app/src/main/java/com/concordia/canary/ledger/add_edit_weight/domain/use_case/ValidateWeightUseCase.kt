@@ -11,14 +11,18 @@ class ValidateWeightUseCase() {
         0.0;
     }
 
-    operator fun invoke(weight: String, units: InputUnits): WeightValidationType {
+    operator fun invoke(
+        weight: String,
+        units: InputUnits,
+        changeMade: Boolean
+    ): WeightValidationType {
 
         val weightValue = parseValue(weight)
 
         if (weightValue < 0) {
             return WeightValidationType.WEIGHT_TOO_LOW
         }
-        if (weightValue == 0.0) {
+        if (weightValue == 0.0 && changeMade) {
             return WeightValidationType.WEIGHT_INCOMPLETE
         }
 

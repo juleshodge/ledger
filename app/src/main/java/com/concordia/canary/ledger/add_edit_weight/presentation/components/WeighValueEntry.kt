@@ -1,8 +1,10 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation.components
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -27,10 +29,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.concordia.canary.ledger.WeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.util.UiText
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 
 @Composable
@@ -74,19 +77,29 @@ fun WeighValueContainer(
         mutableStateOf(false)
     }
 
+    val verySmall = ResponsiveAppTheme.dimens.verySmall
 
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.Center
+    ) {
 
         OutlinedTextField(
             value = weight(),
             onValueChange = { weightValueUpdater(it) },
             textStyle = TextStyle.Default.copy(
-                textAlign = TextAlign.End
+                textAlign = TextAlign.Center
             ),
+
             isError = isWeightError(),
 
             placeholder = {
-                Text(text = "0.0")
+                Text(
+                    text = "           0.0",
+                    textAlign = TextAlign.Center
+                )
+
+
             },
             leadingIcon = {
                 Icon(imageVector = Icons.Outlined.MonitorWeight, contentDescription = null)
@@ -97,7 +110,12 @@ fun WeighValueContainer(
                 }
             },
             suffix = {
-                Text(text = unitAbbreviation().displayName)
+                if (unitAbbreviation().displayName.isBlank()) {
+                    Text(text = "N/A")
+                } else {
+                    Text(text = unitAbbreviation().displayName)
+                }
+
             },
             singleLine = true,
             keyboardOptions = KeyboardOptions(
@@ -111,14 +129,14 @@ fun WeighValueContainer(
                         contentDescription = "More"
                     )
                 }
-            },
+            }
 
-            )
+        )
 
         Box(
             modifier = Modifier
                 .border(
-                    width = 1.dp,
+                    width = verySmall,
                     color = MaterialTheme.colorScheme.primary
                 )
         ) {
@@ -148,8 +166,8 @@ fun WeighValueContainer(
                                     DropdownMenuItem(
                                         text = { Text(text = it.displayName) },
                                         onClick = {
-                                            inputUnitsUpdater(it);
-                                            expandedUnits = false;
+                                            inputUnitsUpdater(it)
+                                            expandedUnits = false
                                         })
                                 }
 
@@ -167,7 +185,7 @@ fun WeighValueContainer(
 fun PreviewWeightEntry(modifier: Modifier = Modifier) {
     WeighValueContainer(
         modifier = modifier,
-        weight = { "171.2" },
+        weight = { "" },
         unitAbbreviation = { InputUnits.KgUnits },
         isWeightError = { true },
         weightErrorMessage = { UiText.DynamicText("A error msg") },

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import java.time.Instant
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -33,6 +34,7 @@ import com.concordia.canary.ledger.WeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.ExtrasSelectionEntry
+import com.concordia.canary.ledger.add_edit_weight.presentation.components.HelperLabelText
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.NotesEntry
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.TimeSpecificationEntry
 import com.concordia.canary.ledger.add_edit_weight.presentation.components.WeighValueEntry
@@ -112,24 +114,26 @@ fun WeightAddPane(
                 viewModelParams.weightParams
             )
 
-            Button(
-                onClick = {
-                    viewModelParams.onSavePressed()
-                },
-                enabled = viewModelParams.weightParams.weightValueValid(),
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Icon(
-                    Icons.Filled.Save,
-                    "Save",
-                )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Button(
+                    onClick = {
+                        viewModelParams.onSavePressed()
+                    },
+                    enabled = viewModelParams.weightParams.weightValueValid(),
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                ) {
+                    Icon(
+                        Icons.Filled.Save,
+                        "Save",
+                    )
+                }
+                HelperLabelText(str = stringResource(R.string.save_label_str))
             }
+
         }
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Text(
-                text = "OPTIONAL", style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            HelperLabelText("OPTIONAL")
         }
 
         TimeSpecificationEntry(
@@ -137,11 +141,9 @@ fun WeightAddPane(
             entryValUpdate = { viewModelParams.weightObsTimeValueUpdate(it) }
         )
 
-
-
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(.8f),
+                modifier = Modifier.fillMaxWidth(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }

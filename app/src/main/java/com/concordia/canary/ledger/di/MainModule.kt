@@ -15,6 +15,7 @@ import com.concordia.canary.ledger.core.data.local.WeightDatabase
 import com.concordia.canary.ledger.add_edit_weight.data.repository.WeightRepositoryImpl
 import com.concordia.canary.ledger.add_edit_weight.domain.repository.WeightRepository
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.AddNewWeightUseCase
+import com.concordia.canary.ledger.add_edit_weight.domain.use_case.InactivateWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadRecentWeightsUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadSavedWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.UpdateSavedWeightUseCase
@@ -54,6 +55,12 @@ object MainModule {
     @Singleton
     fun provideUpdateSavedWeightUseCase(weightRepository: WeightRepository): UpdateSavedWeightUseCase {
         return UpdateSavedWeightUseCase(weightRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInactivateWeightUseCase(weightRepository: WeightRepository): InactivateWeightUseCase {
+        return InactivateWeightUseCase(weightRepository)
     }
 
 

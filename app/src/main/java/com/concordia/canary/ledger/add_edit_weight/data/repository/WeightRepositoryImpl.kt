@@ -26,4 +26,8 @@ class WeightRepositoryImpl(private val dao: WeightDao) : WeightRepository {
 
         emit(Resource.Success(dao.getById(id).toWeightModel()))
     }
+
+    override suspend fun updatedActive(id: Long, newVal: Boolean) {
+        dao.updateStatus(id, status = newVal)
+    }
 }

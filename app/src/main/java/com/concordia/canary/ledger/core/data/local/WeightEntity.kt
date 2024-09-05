@@ -15,7 +15,8 @@ data class WeightEntity(
     val createDate: Long,
     val obsDate: Long,
     val weightExtras: String,
-    val notes: String? = null
+    val notes: String? = null,
+    val active: Boolean = true
 ) {
     fun toWeightModel(): Weight {
         val unitFromNumeric = InputUnits.fromNumeric(weightUnits)
@@ -25,7 +26,8 @@ data class WeightEntity(
             unitFromNumeric,
             obsDate,
             WeightExtras.stringToList(weightExtras),
-            notes
+            notes,
+            active = active
         )
     }
 }

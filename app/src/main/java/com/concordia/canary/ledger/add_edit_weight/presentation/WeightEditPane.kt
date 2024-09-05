@@ -1,5 +1,6 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation
 
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,11 +11,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Upload
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,7 +48,7 @@ fun WeightEditPane(
     ort: Orientation,
     weightId: () -> Long,
 ) {
-
+    val openAlertDialog = remember { mutableStateOf(false) }
     LaunchedEffect(key1 = weightId) {
         weightEditParams.onLoadWeightEntry(weightId())
     }
@@ -55,6 +58,15 @@ fun WeightEditPane(
     }
 
     val mediumLarge = ResponsiveAppTheme.dimens.mediumLarge
+
+    if (openAlertDialog.value) {
+        AlertDialogExample(onDismissRequest = {
+            openAlertDialog.value = false
+        }, onConfirmation = {
+            openAlertDialog.value = false
+            weightEditParams.onDelete(weightId())
+        }, dialogText = "Confirm Deletion", dialogTitle = "Delete current weight entry?")
+    }
 
     Column(
         modifier = modifier
@@ -111,9 +123,9 @@ fun WeightEditPane(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Button(
-                    enabled = false,
+                    enabled = true,
                     onClick = {
-                        weightEditParams.onDelete()
+                        openAlertDialog.value = true
                     },
 
                     ) {
@@ -158,6 +170,47 @@ fun WeightEditPane(
                 })
         }
     }
+}
+
+
+@Composable
+fun AlertDialogExample(
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit,
+    dialogTitle: String,
+    dialogText: String,
+) {
+
+    AlertDialog(
+
+        title = {
+            Text(text = dialogTitle)
+        },
+        text = {
+            Text(text = dialogText)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }
 
 @Composable

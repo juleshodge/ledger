@@ -10,7 +10,8 @@ data class Weight(
     val units: InputUnits,
     val observationDate: Long,
     val extras: List<WeightExtras>,
-    val notes: String? = null
+    val notes: String? = null,
+    val active: Boolean,
 ) {
     fun toEntity(): WeightEntity {
 
@@ -23,7 +24,8 @@ data class Weight(
             obsDate = observationDate,
             weightExtras = displayList,
             createDate = System.currentTimeMillis(),
-            notes = notes
+            notes = notes,
+            active = this.active
         )
     }
 }

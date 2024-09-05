@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.concordia.canary.ledger.core.domain.model.InputUnits
@@ -41,10 +46,20 @@ fun RecentWeightItem(weightVal: Weight) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(ResponsiveAppTheme.dimens.small),
+                    .padding(ResponsiveAppTheme.dimens.small)
+                    .alpha(calculateOpacity(weightVal)),
                 horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically,
 
                 ) {
+                if (!weightVal.active) {
+                    Icon(
+                        modifier = Modifier.alpha(.5f),
+                        imageVector = Icons.Filled.BrokenImage,
+                        contentDescription = "Deleted Entry"
+                    )
+                }
+
                 Text(text = "${weightVal.weightValue}")
                 Spacer(modifier = Modifier.width(ResponsiveAppTheme.dimens.medium))
                 Text(text = weightVal.units.displayName)
@@ -75,9 +90,20 @@ fun RecentWeightItem(weightVal: Weight) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(ResponsiveAppTheme.dimens.small),
-                horizontalArrangement = Arrangement.Start
-            ) {
+                    .padding(ResponsiveAppTheme.dimens.small)
+                    .alpha(calculateOpacity(weightVal)),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically,
+
+                ) {
+                if (!weightVal.active) {
+                    Icon(
+                        modifier = Modifier.alpha(.5f),
+                        imageVector = Icons.Filled.BrokenImage,
+                        contentDescription = "Deleted Entry"
+                    )
+                }
+
                 Text(text = "${weightVal.weightValue}")
                 Spacer(modifier = Modifier.width(ResponsiveAppTheme.dimens.medium))
                 Text(text = weightVal.units.displayName)
@@ -87,6 +113,14 @@ fun RecentWeightItem(weightVal: Weight) {
     }
 }
 
+fun calculateOpacity(weightVal: Weight): Float {
+    if (weightVal.active) {
+        return 1f
+    }
+
+    return .5f;
+}
+
 
 @Composable
 @Preview(showBackground = true)
@@ -94,10 +128,17 @@ fun PreviewRecentWeightItem() {
 
     val selections = WeightExtras.entries
 
-    val testWeight = Weight(null, 155.0, InputUnits.KgUnits, System.currentTimeMillis(), selections)
+    val testWeight = Weight(
+        null,
+        155.0,
+        InputUnits.KgUnits,
+        System.currentTimeMillis(),
+        selections,
+        notes = null,
+        active = false
+    )
     val windowSizeType = WindowSizeType(WindowSize.Compact(400), WindowSize.Compact(600))
     LedgerTheme(windowSizeType) {
         RecentWeightItem(testWeight)
-
     }
 }

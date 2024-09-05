@@ -5,7 +5,7 @@ import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.util.UiText
 
 data class WeightEntryState(
-
+    val changeMade: Boolean = false,
     val weightValue: String = "",
     val weightNotesValue: String = "",
     val weightObsTime: Long = 0,

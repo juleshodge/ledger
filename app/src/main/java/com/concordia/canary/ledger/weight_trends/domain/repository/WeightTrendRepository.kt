@@ -6,5 +6,5 @@ import com.concordia.canary.ledger.util.Resource
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 
 interface WeightTrendRepository {
-    suspend fun loadAll(): Flow<Resource<List<TrendWeight>>>
+    suspend fun loadAllActive(): Flow<Resource<List<TrendWeight>>>
 }

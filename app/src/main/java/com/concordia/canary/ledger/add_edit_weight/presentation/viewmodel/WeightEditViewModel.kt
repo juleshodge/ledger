@@ -21,6 +21,7 @@ import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.domain.model.WeightExtras
 import com.concordia.canary.ledger.util.Resource
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
+import com.concordia.canary.ledger.add_edit_weight.domain.use_case.InactivateWeightUseCase
 import com.concordia.canary.ledger.util.GeneralEvent
 import com.concordia.canary.ledger.util.ScreenRoutes
 
@@ -28,6 +29,7 @@ import com.concordia.canary.ledger.util.ScreenRoutes
 class WeightEditViewModel @Inject constructor(
     private val validateWeightUseCase: ValidateWeightUseCase,
     private val updateSavedWeightUseCase: UpdateSavedWeightUseCase,
+    private val inactiveWeightUseCase: InactivateWeightUseCase,
     private val loadUseCase: LoadSavedWeightUseCase,
 ) : ViewModel() {
 
@@ -39,8 +41,18 @@ class WeightEditViewModel @Inject constructor(
     private val _uiChan = Channel<GeneralEvent>()
     val downStreamChan = _uiChan.receiveAsFlow()
 
-    fun onDelete() {
+    fun onDelete(weightId: Long) {
+        viewModelScope.launch {
 
+            try {
+                inactiveWeightUseCase.invoke(weightId, false)
+            } catch (e: Exception) {
+                _uiChan.send(GeneralEvent.Error("Error changing weight status: ${e.message}"))
+                return@launch
+            }
+
+            _uiChan.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+        }
     }
 
     fun onUpdate() {
@@ -56,7 +68,8 @@ class WeightEditViewModel @Inject constructor(
                     editState.weightUnits,
                     editState.weightObsTime,
                     extras,
-                    notes = editState.weightNotesValue
+                    notes = editState.weightNotesValue,
+                    active = true
                 )
 
             try {
@@ -128,7 +141,11 @@ class WeightEditViewModel @Inject constructor(
             weightValue = newWeightValue
         )
 
-        validateWeightUseCase.invoke(editState.weightValue, editState.weightUnits)
+        validateWeightUseCase.invoke(
+            editState.weightValue,
+            editState.weightUnits,
+            editState.changeMade
+        )
     }
 
     fun onWeightValueNotesChanged(newNotesVal: String) {
