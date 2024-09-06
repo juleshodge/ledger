@@ -21,6 +21,10 @@ class RecentWeightsViewModel @Inject constructor(private val loadRecentWeightsUs
     var recentsState by mutableStateOf(RecentWeightsState())
         private set
 
+    init {
+        loadRecentWeights()
+    }
+
     fun loadRecentWeights() {
         viewModelScope.launch {
             loadRecentWeightsUseCase.invoke().collect(FlowCollector { result ->

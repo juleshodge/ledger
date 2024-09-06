@@ -9,10 +9,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.RecentWeightParams
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
@@ -29,9 +30,6 @@ fun WeightCopyPane(
     modifier: Modifier = Modifier,
     recentItemsParams: RecentWeightParams
 ) {
-    LaunchedEffect(true) {
-        recentItemsParams.loadRecentWeights();
-    }
     Card(
         modifier = modifier
             .padding(ResponsiveAppTheme.dimens.mediumLarge),
@@ -41,7 +39,19 @@ fun WeightCopyPane(
         )
     ) {
         if (recentItemsParams.recentState().isLoading) {
-            Text(text = "Loading...")
+            Column(
+                modifier = modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.recent_entries_copy_label_str),
+                    modifier = Modifier.padding(top = ResponsiveAppTheme.dimens.small),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Text(text = "Loading...")
+            }
         } else {
             if (recentItemsParams.recentState().recentWeights.isNotEmpty()) {
                 Column(
@@ -50,7 +60,7 @@ fun WeightCopyPane(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Recent Entries",
+                        text = stringResource(R.string.recent_entries_copy_label_str),
                         modifier = Modifier.padding(top = ResponsiveAppTheme.dimens.small),
                         style = MaterialTheme.typography.bodyLarge
                     )

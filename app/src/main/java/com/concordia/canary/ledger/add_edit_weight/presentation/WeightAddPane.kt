@@ -3,10 +3,7 @@ package com.concordia.canary.ledger.add_edit_weight.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 
-import java.time.Instant
-
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -19,7 +16,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -51,11 +47,6 @@ fun WeightAddPane(
 ) {
     val availExtras by remember {
         mutableStateOf(WeightExtras.entries.toList())
-    }
-
-    LaunchedEffect(key1 = true) {
-        val timeInMillis = Instant.now().toEpochMilli()
-        viewModelParams.weightObsTimeValueUpdate(timeInMillis)
     }
 
     val mediumLarge = ResponsiveAppTheme.dimens.mediumLarge
@@ -138,7 +129,7 @@ fun WeightAddPane(
 
         TimeSpecificationEntry(
             entryVal = { viewModelParams.weightObsTimeValue() },
-            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate(it) }
+            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate }
         )
 
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {

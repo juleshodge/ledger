@@ -9,4 +9,5 @@
     <string name="trends_title_str">Trends</string>
     <string name="no_entries_to_display_str">No entries to display</string>
     <string name="save_label_str">SAVE</string>
+    <string name="recent_entries_copy_label_str">Recent Entries</string>
 </resources>

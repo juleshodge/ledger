@@ -85,7 +85,6 @@ fun Navigation(modifier: Modifier = Modifier) {
             WeightTrendsPane(
                 trendsStateParams = params
             )
-
         }
 
         composable(
@@ -189,7 +188,8 @@ fun Navigation(modifier: Modifier = Modifier) {
             )
 
             val recentParams =
-                RecentWeightParams(loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
+                RecentWeightParams(
+                    loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
                     recentState = { recentWeightsViewModel.recentsState })
 
             LocalLifecycleOwner.current.lifecycleScope.launch {

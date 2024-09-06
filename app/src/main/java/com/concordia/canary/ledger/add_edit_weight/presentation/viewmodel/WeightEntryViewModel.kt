@@ -1,6 +1,7 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel
 
 import javax.inject.Inject
+import java.time.Instant
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,7 +23,6 @@ import com.concordia.canary.ledger.util.GeneralEvent
 import com.concordia.canary.ledger.util.ScreenRoutes
 import com.concordia.canary.ledger.util.UiText
 
-
 @HiltViewModel
 class WeightEntryViewModel @Inject constructor(
     val validateWeightUseCase: ValidateWeightUseCase,
@@ -33,6 +33,12 @@ class WeightEntryViewModel @Inject constructor(
     var entryState by mutableStateOf(WeightEntryState())
         private set
 
+    init {
+        if (entryState.weightObsTime == 0L) {
+            val timeInMillis = Instant.now().toEpochMilli()
+            onWeightObsTimeChange(timeInMillis)
+        }
+    }
 
     private val _uiChan = Channel<GeneralEvent>()
     val downStreamChan = _uiChan.receiveAsFlow()
