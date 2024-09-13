@@ -129,7 +129,7 @@ fun WeightAddPane(
 
         TimeSpecificationEntry(
             entryVal = { viewModelParams.weightObsTimeValue() },
-            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate }
+            entryValUpdate = { viewModelParams.weightObsTimeValueUpdate(it) }
         )
 
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {

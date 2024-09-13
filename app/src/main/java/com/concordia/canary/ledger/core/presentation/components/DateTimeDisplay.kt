@@ -3,10 +3,10 @@ package com.concordia.canary.ledger.core.presentation.components
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.util.Date
+import java.time.temporal.ChronoUnit
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import java.time.temporal.ChronoUnit
 
 @Composable
 fun DateTimeDisplay(timeStamp: Long) {

@@ -10,10 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
-
 import dagger.hilt.android.AndroidEntryPoint
-
 import com.concordia.canary.ledger.add_edit_weight.presentation.PreviewWeightPane
 import com.concordia.canary.ledger.ui.theme.LedgerTheme
 import com.concordia.canary.ledger.ui.theme.WindowSize
@@ -49,7 +46,7 @@ class MainActivity : ComponentActivity() {
 data class TrendWeightParams(
     val trendState: () -> WeightTrendsState,
     val loadTrendWeights: () -> Unit,
-    val eventSendHandler: (TrendWeightEvent) -> Unit
+    val eventSendHandler: (TrendWeightEvent) -> Unit,
 )
 
 data class WeightParams(

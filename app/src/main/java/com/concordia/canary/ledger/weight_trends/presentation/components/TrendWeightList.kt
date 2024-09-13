@@ -36,9 +36,11 @@ fun TrendWeightList(
 ) {
     val trendWeights = trendsStateParams.trendState().trendWeights;
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(ResponsiveAppTheme.dimens.medium)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(ResponsiveAppTheme.dimens.medium)
+    ) {
         OutlinedIconButton(
             onClick = {
                 trendsStateParams.eventSendHandler(TrendWeightEvent.NavToAdd)
@@ -103,7 +105,13 @@ fun PreviewWeightList() {
 
     val windowSizeType = WindowSizeType(WindowSize.Expanded(500), WindowSize.Expanded(500))
 
-    val state = { WeightTrendsState(trendWeights = tempWeights, false) }
+    val state = {
+        WeightTrendsState(
+            trendWeights = tempWeights,
+            trendWeightStats = null,
+            false
+        )
+    }
 
     val params = TrendWeightParams(
         loadTrendWeights = {},

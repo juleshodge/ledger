@@ -19,8 +19,10 @@ import com.concordia.canary.ledger.add_edit_weight.domain.use_case.InactivateWei
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadRecentWeightsUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadSavedWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.UpdateSavedWeightUseCase
+import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.data.repository.WeightTrendRepositoryImpl
 import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
+import com.concordia.canary.ledger.weight_trends.domain.use_case.CalculateSevenDayTrendUseCase
 import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsUseCase
 
 @Module
@@ -37,6 +39,12 @@ object MainModule {
     @Singleton
     fun provideAddNewWeightUseCase(weightRepository: WeightRepository): AddNewWeightUseCase {
         return AddNewWeightUseCase(weightRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun calculateSevenDayTrendUseCase(): CalculateSevenDayTrendUseCase {
+        return CalculateSevenDayTrendUseCase(converter = WeightConverter())
     }
 
     @Provides
