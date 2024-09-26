@@ -27,6 +27,8 @@ import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.Recent
 import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.WeightEditViewModel
 import com.concordia.canary.ledger.add_edit_weight.presentation.viewmodel.WeightEntryViewModel
 import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.trend_settings_edit.presentation.TrendSettingsPane
+import com.concordia.canary.ledger.trend_settings_edit.presentation.viewmodel.TrendSettingsViewModel
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
 import com.concordia.canary.ledger.weight_trends.presentation.WeightTrendsPane
@@ -35,42 +37,65 @@ import com.concordia.canary.ledger.weight_trends.presentation.viewmodel.WeightTr
 @Composable
 fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
+    val ort = ResponsiveAppTheme.ortMode;
 
     NavHost(
         navController = navController,
         startDestination = ScreenRoutes.WeightTrendPane.route,
         modifier = modifier
     ) {
+        composable(ScreenRoutes.TrendSettingsPane.route) {
+            val viewModel: TrendSettingsViewModel = hiltViewModel()
+
+            TrendSettingsPane(
+                getSelectableUnits = viewModel::getAvailSelectableUnits,
+                trendSelectionUpdate = viewModel::updateTrendUnitSelection,
+                selectedUnits = { viewModel.state.sel },
+
+                onDaysBackChange = viewModel::onDaysBackChange,
+                daysBackVal = { viewModel.state.daysBack.toString() },
+                onSettingsNavBack = {
+                    navController.navigate(ScreenRoutes.WeightTrendPane.route) {
+                        popUpTo(0)
+                    }
+                },
+                ort = ort
+            )
+        }
 
         composable(ScreenRoutes.WeightTrendPane.route) {
 
             val viewModel: WeightTrendsViewModel = hiltViewModel()
 
             LocalLifecycleOwner.current.lifecycleScope.launch {
-                viewModel.trendEvents
-                    .collectLatest { value ->
-                        when (value) {
-                            TrendWeightEvent.NavToAdd -> {
-                                navController.navigate(ScreenRoutes.WeightAddPane.route) {
-                                    popUpTo(0)
-                                }
+                viewModel.trendEvents.collectLatest { value ->
+                    when (value) {
+                        TrendWeightEvent.NavToAdd -> {
+                            navController.navigate(ScreenRoutes.WeightAddPane.route) {
+                                popUpTo(0)
                             }
+                        }
 
-                            is TrendWeightEvent.NavToEdit -> {
+                        is TrendWeightEvent.NavToEdit -> {
 
-                                val finalDest = ScreenRoutes.WeightEditPane.route.replace(
-                                    oldValue = "{weightId}",
-                                    newValue = "${value.weightId}"
-                                )
+                            val finalDest = ScreenRoutes.WeightEditPane.route.replace(
+                                oldValue = "{weightId}", newValue = "${value.weightId}"
+                            )
 
-                                navController.navigate(
-                                    finalDest,
-                                ) {
-                                    popUpTo(0)
-                                }
+                            navController.navigate(
+                                finalDest,
+                            ) {
+                                popUpTo(0)
+                            }
+                        }
+
+                        TrendWeightEvent.NavToTrendSettings -> {
+                            navController.navigate(ScreenRoutes.TrendSettingsPane.route) {
+                                popUpTo(0)
                             }
                         }
                     }
+                }
             }
 
 
@@ -92,59 +117,61 @@ fun Navigation(modifier: Modifier = Modifier) {
             arguments = listOf(navArgument("weightId") { type = NavType.StringType })
         ) { backStackEntry ->
             val weightId = backStackEntry.arguments?.getString("weightId")
-            val ort = ResponsiveAppTheme.ortMode;
+
             val context = LocalContext.current
-            val viewModel: WeightEditViewModel = hiltViewModel()
+            val weightEditViewModel: WeightEditViewModel = hiltViewModel()
 
             val params = WeightEditParams(
-                onUpdate = viewModel::onUpdate,
-                onLoadWeightEntry = viewModel::onLoadWeightEntry,
-                selectedExtras = { viewModel.editState.selectedExtras },
+                onUpdate = weightEditViewModel::onUpdate,
+                onLoadWeightEntry = weightEditViewModel::onLoadWeightEntry,
+                selectedExtras = { weightEditViewModel.editState.selectedExtras },
                 weightParams = WeightParams(
 
-                    weightValueValid = { viewModel.editState.weightValueValid },
-                    weightUnits = { viewModel.editState.weightUnits },
-                    weightValue = { viewModel.editState.weightValue },
-                    weightValueError = { viewModel.editState.weightValueError },
-                    weightValueUpdate = viewModel::onWeightValueChanged,
-                    onUnitsChanged = viewModel::onUnitsChanged,
+                    weightValueValid = { weightEditViewModel.editState.weightValueValid },
+                    weightUnits = { weightEditViewModel.editState.weightUnits },
+                    weightValue = { weightEditViewModel.editState.weightValue },
+                    weightValueError = { weightEditViewModel.editState.weightValueError },
+                    weightValueUpdate = weightEditViewModel::onWeightValueChanged,
+                    onUnitsChanged = weightEditViewModel::onUnitsChanged,
                     availableWeightUnits = { InputUnits.entries.toList() },
                 ),
 
-                updateExtraSelection = viewModel::onWeightExtraSelected,
+                updateExtraSelection = weightEditViewModel::onWeightExtraSelected,
 
                 noteEditParams = NoteEditParams(
                     weightNotesValue = {
-                        if (viewModel.editState.weightNotesValue.isNullOrEmpty()) "" else viewModel.editState.weightNotesValue.toString()
-                    },
-                    weightNotesValueUpdate = viewModel::onWeightValueNotesChanged
+                        if (weightEditViewModel.editState.weightNotesValue.isNullOrEmpty()) "" else weightEditViewModel.editState.weightNotesValue.toString()
+                    }, weightNotesValueUpdate = weightEditViewModel::onWeightValueNotesChanged
                 ),
-                onDelete = viewModel::onDelete,
+                onDelete = weightEditViewModel::onDelete,
 
-                weightObsTimeValue = { viewModel.editState.weightObsTime },
+                weightObsTimeValue = { weightEditViewModel.editState.weightObsTime },
             )
 
 
             //TODO this needs to be shared
             LocalLifecycleOwner.current.lifecycleScope.launch {
-                viewModel.downStreamChan
-                    .collectLatest { value ->
-                        when (value) {
-                            is GeneralEvent.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    value.errorMessage,
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                            }
+                weightEditViewModel.generalEventFlow.collectLatest { value ->
+                    when (value) {
+                        is GeneralEvent.Error -> {
+                            Toast.makeText(
+                                context,
+                                value.errorMessage,
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
 
-                            is GeneralEvent.NavToRoute -> {
-                                navController.navigate(ScreenRoutes.WeightTrendPane.route) {
-                                    popUpTo(0)
-                                }
+
+                        is GeneralEvent.NavToRoute -> {
+                            navController.navigate(ScreenRoutes.WeightTrendPane.route) {
+                                popUpTo(0)
                             }
                         }
+
+                        is GeneralEvent.WeightAdded -> TODO()
+                        is GeneralEvent.WeightUpdated -> TODO()
                     }
+                }
             }
 
 
@@ -163,7 +190,6 @@ fun Navigation(modifier: Modifier = Modifier) {
             val viewModel: WeightEntryViewModel = hiltViewModel()
             val recentWeightsViewModel: RecentWeightsViewModel = hiltViewModel();
             val context = LocalContext.current
-            val ort = ResponsiveAppTheme.ortMode;
 
             val params = WeightAddParams(
                 onSavePressed = viewModel::onSavePressed,
@@ -188,47 +214,47 @@ fun Navigation(modifier: Modifier = Modifier) {
             )
 
             val recentParams =
-                RecentWeightParams(
-                    loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
+                RecentWeightParams(loadRecentWeights = recentWeightsViewModel::loadRecentWeights,
                     recentState = { recentWeightsViewModel.recentsState })
 
             LocalLifecycleOwner.current.lifecycleScope.launch {
-                viewModel.downStreamChan
-                    .collectLatest { value ->
-                        when (value) {
-                            is GeneralEvent.Error -> {
-                                Toast.makeText(
-                                    context,
-                                    value.errorMessage,
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                            }
+                viewModel.downStreamChan.collectLatest { value ->
+                    when (value) {
+                        is GeneralEvent.Error -> {
+                            Toast.makeText(
+                                context,
+                                value.errorMessage,
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
 
-                            is GeneralEvent.NavToRoute -> {
-                                navController.navigate(ScreenRoutes.WeightTrendPane.route) {
-                                    popUpTo(0)
-                                }
+                        is GeneralEvent.NavToRoute -> {
+                            navController.navigate(ScreenRoutes.WeightTrendPane.route) {
+                                popUpTo(0)
                             }
                         }
+
+                        is GeneralEvent.WeightAdded -> TODO()
+                        is GeneralEvent.WeightUpdated -> TODO()
                     }
+                }
             }
 
-            WeightPane(
-                viewModelParams = params,
+            WeightPane(viewModelParams = params,
                 recentItems = recentParams,
                 ort = ort,
                 weightAddNavBack = {
                     navController.navigate(ScreenRoutes.WeightTrendPane.route) {
                         popUpTo(0)
                     }
-                }
-            )
+                })
         }
     }
 }
 
 sealed class ScreenRoutes(val route: String, vararg params: String) {
     data object WeightAddPane : ScreenRoutes("weight_add/")
+    data object TrendSettingsPane : ScreenRoutes("trend_settings/")
     data object WeightTrendPane : ScreenRoutes("weight_trend/")
     data object WeightEditPane : ScreenRoutes("weight_edit/{weightId}")
 }

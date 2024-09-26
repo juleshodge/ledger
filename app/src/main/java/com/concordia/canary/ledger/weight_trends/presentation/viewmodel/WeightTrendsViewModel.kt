@@ -17,17 +17,24 @@ import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrends
 import com.concordia.canary.ledger.util.Resource
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
 import com.concordia.canary.ledger.weight_trends.domain.use_case.CalculateSevenDayTrendUseCase
+import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsWithSettingsUseCase
 
 
 @HiltViewModel
 class WeightTrendsViewModel @Inject constructor(
     private val loadUserWeightsUseCase: LoadUserWeightsUseCase,
-    private val calcTrend: CalculateSevenDayTrendUseCase
+    private val calcTrend: CalculateSevenDayTrendUseCase,
+    private val userWeightsWithSettingsUseCase: LoadUserWeightsWithSettingsUseCase
 ) :
     ViewModel() {
 
     var trendsState by mutableStateOf(WeightTrendsState())
         private set
+
+    init {
+        loadRecentTrendWeights()
+    }
+
     private val _trendChannel = Channel<TrendWeightEvent>()
 
     val trendEvents = _trendChannel.receiveAsFlow()
@@ -38,9 +45,11 @@ class WeightTrendsViewModel @Inject constructor(
         }
     }
 
+
+
     fun loadRecentTrendWeights() {
         viewModelScope.launch {
-            loadUserWeightsUseCase.invoke().collect(FlowCollector { result ->
+            userWeightsWithSettingsUseCase.invoke().collect(FlowCollector { result ->
 
                 trendsState = when (result) {
                     is Resource.Loading -> {

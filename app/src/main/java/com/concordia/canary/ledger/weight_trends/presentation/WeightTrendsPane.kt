@@ -1,13 +1,10 @@
 package com.concordia.canary.ledger.weight_trends.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,7 +17,6 @@ import com.concordia.canary.ledger.ui.theme.LedgerTheme
 import com.concordia.canary.ledger.ui.theme.WindowSize
 import com.concordia.canary.ledger.ui.theme.WindowSizeType
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
-import com.concordia.canary.ledger.weight_trends.presentation.components.TrendStatsDisplay
 import com.concordia.canary.ledger.weight_trends.presentation.components.TrendWeightList
 import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrendsState
 
@@ -28,10 +24,6 @@ import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrends
 fun WeightTrendsPane(
     trendsStateParams: TrendWeightParams
 ) {
-    LaunchedEffect(true) {
-        trendsStateParams.loadTrendWeights();
-    }
-
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
         Text(
@@ -39,7 +31,6 @@ fun WeightTrendsPane(
             style = MaterialTheme.typography.displayLarge
         )
 
-        TrendStatsDisplay(stats = trendsStateParams.trendState().trendWeightStats)
         TrendWeightList(trendsStateParams)
     }
 }

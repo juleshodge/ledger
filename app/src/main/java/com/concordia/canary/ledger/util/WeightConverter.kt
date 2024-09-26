@@ -1,6 +1,7 @@
 package com.concordia.canary.ledger.util
 
 import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendExtraUnits
 
 class WeightConverter {
 
@@ -23,6 +24,17 @@ class WeightConverter {
 
         throw IllegalArgumentException("Unsupported conversion")
 
+    }
+
+    fun convertToExtra(
+        sourceUnits: InputUnits,
+        targetUnits: TrendExtraUnits
+    ) {
+
+    }
+
+    private fun convertToSt(lbValue: Double): Double {
+        return lbValue / 14
     }
 
     private fun convertToKg(lbValue: Double): Double {

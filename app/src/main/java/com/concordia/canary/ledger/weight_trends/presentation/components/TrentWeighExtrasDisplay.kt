@@ -16,8 +16,8 @@ import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 
 @Composable
 fun TrentWeighExtrasDisplay(
-    currentSelections: () -> List<WeightExtras>,
-    availableWeightExtras: () -> List<WeightExtras>
+    currentSelections: () -> Array<WeightExtras>,
+    availableWeightExtras: () -> Array<WeightExtras>
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -66,6 +66,6 @@ fun TrentWeighExtrasDisplay(
 fun PreviewTrendWeightExtraDisplay() {
     val currentSelections = { listOf(WeightExtras.Boots) }
     TrentWeighExtrasDisplay(
-        currentSelections = currentSelections,
-        availableWeightExtras = { WeightExtras.entries.toList() })
+        currentSelections = { currentSelections().toTypedArray() },
+        availableWeightExtras = { WeightExtras.entries.toTypedArray() })
 }

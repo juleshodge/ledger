@@ -19,11 +19,17 @@ import com.concordia.canary.ledger.add_edit_weight.domain.use_case.InactivateWei
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadRecentWeightsUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadSavedWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.UpdateSavedWeightUseCase
+import com.concordia.canary.ledger.core.domain.model.InputUnits
+import com.concordia.canary.ledger.core.util.TrendWeightConverter
+import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
+import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSettings
+import com.concordia.canary.ledger.trend_settings_edit.domain.use_case.LoadSelectableUnitsUseCase
 import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.data.repository.WeightTrendRepositoryImpl
 import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
 import com.concordia.canary.ledger.weight_trends.domain.use_case.CalculateSevenDayTrendUseCase
 import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsUseCase
+import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsWithSettingsUseCase
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -49,9 +55,32 @@ object MainModule {
 
     @Provides
     @Singleton
+    fun provideTrendWeightConverter(): TrendWeightConverter {
+        return TrendWeightConverter(simpleWeightConverter = WeightConverter())
+    }
+
+    @Provides
+    @Singleton
     fun provideWeightTrendRepositoryUseCase(weightTrendRepository: WeightTrendRepository): LoadUserWeightsUseCase {
         return LoadUserWeightsUseCase(weightTrendRepository)
     }
+
+    @Provides
+    @Singleton
+    fun provideLoadUserWeightsWithSettingsUseCase(
+        weightTrendRepository: WeightTrendRepository,
+        trendWeightConverter: TrendWeightConverter
+    ): LoadUserWeightsWithSettingsUseCase {
+
+        val trendSettings =
+            TrendSettings(TrendSelectedUnits.ConvertTrendUnit(InputUnits.LbUnits), daysBack = 365)
+        return LoadUserWeightsWithSettingsUseCase(
+            weightTrendRepository,
+            trendWeightConverter = trendWeightConverter,
+            trendSettings
+        )
+    }
+
 
     @Provides
     @Singleton
@@ -77,6 +106,14 @@ object MainModule {
     fun provideRecentWeightsUseCase(weightRepository: WeightRepository): LoadRecentWeightsUseCase {
         return LoadRecentWeightsUseCase(weightRepository)
     }
+
+
+    @Provides
+    @Singleton
+    fun provideLoadSelectableUnitsUseCase(): LoadSelectableUnitsUseCase {
+        return LoadSelectableUnitsUseCase()
+    }
+
 
     @Provides
     @Singleton

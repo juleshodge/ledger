@@ -43,10 +43,14 @@ fun TrendStatsDisplay(stats: TrendStats?) {
                 if (stats == null) {
                     Text(text = twoDecPlaces.format(0))
                 } else {
-                    if(stats.delta > 0) {
-
+                    if (stats.delta > 0) {
+                        Text(
+                            text = "+${twoDecPlaces.format(stats.delta)}",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
+                        Text(text = twoDecPlaces.format(stats.delta))
                     }
-                    Text(text = twoDecPlaces.format(stats.delta))
                 }
             }
 

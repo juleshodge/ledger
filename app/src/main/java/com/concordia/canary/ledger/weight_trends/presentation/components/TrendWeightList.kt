@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
+import androidx.compose.material.icons.twotone.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
@@ -41,15 +42,39 @@ fun TrendWeightList(
             .fillMaxWidth()
             .padding(ResponsiveAppTheme.dimens.medium)
     ) {
-        OutlinedIconButton(
-            onClick = {
-                trendsStateParams.eventSendHandler(TrendWeightEvent.NavToAdd)
-            },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.TwoTone.Add, contentDescription = "Add Weight"
-            )
+
+            TrendStatsDisplay(stats = trendsStateParams.trendState().trendWeightStats)
+
+            Column {
+                OutlinedIconButton(onClick = { trendsStateParams.eventSendHandler(TrendWeightEvent.NavToTrendSettings) }) {
+                    Icon(
+
+                        imageVector = Icons.TwoTone.Settings,
+                        contentDescription = "Settings"
+                    )
+                }
+
+                OutlinedIconButton(
+                    onClick = {
+                        trendsStateParams.eventSendHandler(TrendWeightEvent.NavToAdd)
+                    },
+
+                    ) {
+                    Icon(
+
+                        imageVector = Icons.TwoTone.Add,
+                        contentDescription = "Add Weight"
+                    )
+                }
+            }
         }
 
         if (trendWeights.isEmpty()) {
@@ -59,11 +84,17 @@ fun TrendWeightList(
             }
         }
 
+        val listSize = trendWeights.size
+
+        val keys = trendWeights.map { tw -> tw.id!! }.toTypedArray()
+
+        val stableList = trendWeights.toTypedArray()
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(trendWeights.size) {
+            items(listSize,
+                key = { keys[it] }) {
                 TrendWeightDisplay(
-                    trendWeights[it],
+                    { stableList[it] },
                     eventSendHandler = trendsStateParams.eventSendHandler
                 )
             }

@@ -38,8 +38,8 @@ class WeightEditViewModel @Inject constructor(
     )
         private set
 
-    private val _uiChan = Channel<GeneralEvent>()
-    val downStreamChan = _uiChan.receiveAsFlow()
+    private val _generalEventMutableFlow = Channel<GeneralEvent>()
+    val generalEventFlow = _generalEventMutableFlow.receiveAsFlow()
 
     fun onDelete(weightId: Long) {
         viewModelScope.launch {
@@ -47,11 +47,11 @@ class WeightEditViewModel @Inject constructor(
             try {
                 inactiveWeightUseCase.invoke(weightId, false)
             } catch (e: Exception) {
-                _uiChan.send(GeneralEvent.Error("Error changing weight status: ${e.message}"))
+                _generalEventMutableFlow.send(GeneralEvent.Error("Error changing weight status: ${e.message}"))
                 return@launch
             }
 
-            _uiChan.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+            _generalEventMutableFlow.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 
@@ -75,17 +75,16 @@ class WeightEditViewModel @Inject constructor(
             try {
                 updateSavedWeightUseCase.invoke(updatedWeight)
             } catch (e: Exception) {
-                _uiChan.send(GeneralEvent.Error("Error Updating Weight: ${e.message}"))
+                _generalEventMutableFlow.send(GeneralEvent.Error("Error Updating Weight: ${e.message}"))
                 return@launch
             }
 
-            _uiChan.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+            _generalEventMutableFlow.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 
     fun onUnitsChanged(newUnits: InputUnits) {
         editState = editState.copy(weightUnits = newUnits)
-
     }
 
     fun onWeightExtraSelected(weightExtra: WeightExtras, selectionVal: Boolean) {

@@ -1,12 +1,13 @@
 package com.concordia.canary.ledger.weight_trends.domain.use_case
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.Test
 
-import org.junit.jupiter.api.Test
+import org.junit.Assert.*
 
 class LoadUserWeightsWithSettingsUseCaseTest {
 
     @Test
-    operator fun invoke() {
+    fun invoke_withLoading_returnsLoading() {
+
     }
 }

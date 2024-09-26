@@ -24,7 +24,6 @@ import com.concordia.canary.ledger.util.Navigation
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
 import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrendsState
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

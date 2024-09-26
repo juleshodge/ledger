@@ -1,6 +1,6 @@
 package com.concordia.canary.ledger.add_edit_weight.presentation
 
-import androidx.appcompat.app.AlertDialog
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
