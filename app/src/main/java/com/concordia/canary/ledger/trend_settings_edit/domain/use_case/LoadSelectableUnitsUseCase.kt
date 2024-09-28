@@ -12,7 +12,7 @@ class LoadSelectableUnitsUseCase {
             .map { i -> TrendSelectedUnits.ConvertTrendUnit(i) }
             .toMutableList()
 
-        availConversions.add(TrendSelectedUnits.OriginalTrendUnit("Keep Original"))
+        availConversions.add(TrendSelectedUnits.OriginalTrendUnit("Keep Original blah"))
 
         return availConversions
     }

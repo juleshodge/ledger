@@ -10,8 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
 
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadSavedWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.UpdateSavedWeightUseCase
@@ -38,8 +36,11 @@ class WeightEditViewModel @Inject constructor(
     )
         private set
 
-    private val _generalEventMutableFlow = Channel<GeneralEvent>()
-    val generalEventFlow = _generalEventMutableFlow.receiveAsFlow()
+    private var _sendEvent: (GeneralEvent) -> Unit = {}
+
+    fun setEventMethod(sendEvent: (GeneralEvent) -> Unit) {
+        _sendEvent = sendEvent
+    }
 
     fun onDelete(weightId: Long) {
         viewModelScope.launch {
@@ -47,11 +48,10 @@ class WeightEditViewModel @Inject constructor(
             try {
                 inactiveWeightUseCase.invoke(weightId, false)
             } catch (e: Exception) {
-                _generalEventMutableFlow.send(GeneralEvent.Error("Error changing weight status: ${e.message}"))
+                _sendEvent(GeneralEvent.Error("Error changing weight status: ${e.message}"))
                 return@launch
             }
-
-            _generalEventMutableFlow.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+            _sendEvent(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 
@@ -75,11 +75,12 @@ class WeightEditViewModel @Inject constructor(
             try {
                 updateSavedWeightUseCase.invoke(updatedWeight)
             } catch (e: Exception) {
-                _generalEventMutableFlow.send(GeneralEvent.Error("Error Updating Weight: ${e.message}"))
+                _sendEvent(GeneralEvent.Error("Error Updating Weight: ${e.message}"))
+
                 return@launch
             }
 
-            _generalEventMutableFlow.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+            _sendEvent(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 
@@ -127,7 +128,6 @@ class WeightEditViewModel @Inject constructor(
                             weightValueValid = true,
                             selectedExtras = weightEntry.extras,
                             weightId = weightEntry.weightId
-
                         )
                     }
                 }

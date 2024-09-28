@@ -1,8 +1,7 @@
 package com.concordia.canary.ledger.weight_trends.domain.use_case
 
-import com.concordia.canary.ledger.core.domain.model.InputUnits
 import java.util.Calendar
-
+import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendStats
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
@@ -41,7 +40,7 @@ class CalculateSevenDayTrendUseCase(private val converter: WeightConverter) {
         }
 
         if (size == 1) {
-            val trendWeight = applicableWeights[0]
+            val trendWeight = sortedByDescending[0]
             return (TrendStats(
                 average = trendWeight.originalValue!!,
                 trendWeight.originalWeightUnits!!,

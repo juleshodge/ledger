@@ -16,7 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
 import com.concordia.canary.ledger.trend_settings_edit.presentation.components.DaysBack
@@ -37,7 +39,6 @@ fun TrendSettingsPane(
 ) {
     val mediumLarge = ResponsiveAppTheme.dimens.mediumLarge
 
-
     if (ort == Orientation.WIDER) {
         Column(
             modifier = modifier
@@ -56,8 +57,11 @@ fun TrendSettingsPane(
 
                         )
                 }
-                Text(text = "Trend Settings", style = MaterialTheme.typography.displayLarge)
 
+                Text(
+                    text = stringResource(R.string.trend_settings_label_str),
+                    style = MaterialTheme.typography.displayLarge
+                )
             }
             HorizontalDivider()
             Row() {
@@ -84,11 +88,10 @@ fun TrendSettingsPane(
                             .padding(ResponsiveAppTheme.dimens.medium)
                     ) {
                         Button(onClick = { /*TODO*/ }) {
-                            Text(text = "Save")
+                            Text(text = stringResource(R.string.save_btn_label_str))
                         }
                     }
                 }
-
             }
         }
 
@@ -98,8 +101,7 @@ fun TrendSettingsPane(
             modifier = Modifier
                 .fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(mediumLarge),
-
-            ) {
+        ) {
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Start,
@@ -112,9 +114,11 @@ fun TrendSettingsPane(
 
                         )
                 }
-
             }
-            Text(text = "Trend Settings", style = MaterialTheme.typography.displayLarge)
+            Text(
+                text = stringResource(R.string.trend_settings_label_str),
+                style = MaterialTheme.typography.displayLarge
+            )
             HorizontalDivider()
             PreferredWeightSelection(
                 availableSelections = getSelectableUnits,
@@ -130,7 +134,7 @@ fun TrendSettingsPane(
             )
 
             Button(onClick = { /*TODO*/ }) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.save_btn_label_str))
             }
         }
     }
@@ -145,7 +149,7 @@ fun PreviewTrendSettingsPane() {
     val lt = listOf(
         TrendSelectedUnits.ConvertTrendUnit(InputUnits.LbUnits),
         TrendSelectedUnits.ConvertTrendUnit(InputUnits.KgUnits),
-        TrendSelectedUnits.OriginalTrendUnit("Keep original")
+        TrendSelectedUnits.OriginalTrendUnit("Keep original b")
     )
     TrendSettingsPane(
         getSelectableUnits = { lt },

@@ -9,8 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+
 import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.add_edit_weight.domain.model.Weight
@@ -40,8 +39,11 @@ class WeightEntryViewModel @Inject constructor(
         }
     }
 
-    private val _uiChan = Channel<GeneralEvent>()
-    val downStreamChan = _uiChan.receiveAsFlow()
+    private var _sendEvent: (GeneralEvent) -> Unit = {}
+
+    fun setEventMethod(sendEvent: (GeneralEvent) -> Unit) {
+        _sendEvent = sendEvent
+    }
 
     fun onWeightObsTimeChange(newWeightTime: Long) {
         entryState = entryState.copy(
@@ -87,7 +89,7 @@ class WeightEntryViewModel @Inject constructor(
         }
     }
 
-    fun onSavePressed() {
+    fun onSavePressed(saveMessage: String) {
         viewModelScope.launch {
             val weightValue = entryState.weightValue.toDouble();
 
@@ -107,11 +109,13 @@ class WeightEntryViewModel @Inject constructor(
             try {
                 addNewWeightUseCase(newWeight)
             } catch (e: Exception) {
-                _uiChan.send(GeneralEvent.Error("Error Saving Weight: ${e.message}"))
+                _sendEvent(GeneralEvent.Error("Error Saving Weight: ${e.message}"))
+
                 return@launch
             }
 
-            _uiChan.send(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
+            _sendEvent(GeneralEvent.WeightAdded(saveMessage))
+            _sendEvent(GeneralEvent.NavToRoute(ScreenRoutes.WeightTrendPane))
         }
     }
 

@@ -38,7 +38,6 @@ import com.concordia.canary.ledger.ui.theme.Orientation
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
 import com.concordia.canary.ledger.util.UiText
 
-
 @Composable
 fun WeightAddPane(
     modifier: Modifier = Modifier,
@@ -106,9 +105,11 @@ fun WeightAddPane(
             )
 
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                val message = stringResource(R.string.weight_added_message_str)
                 Button(
                     onClick = {
-                        viewModelParams.onSavePressed()
+
+                        viewModelParams.onSavePressed(message)
                     },
                     enabled = viewModelParams.weightParams.weightValueValid(),
                     modifier = Modifier
@@ -121,8 +122,8 @@ fun WeightAddPane(
                 }
                 HelperLabelText(str = stringResource(R.string.save_label_str))
             }
-
         }
+        
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
             HelperLabelText("OPTIONAL")
         }

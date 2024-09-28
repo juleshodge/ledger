@@ -59,7 +59,7 @@ data class WeightParams(
 )
 
 data class WeightAddParams(
-    val onSavePressed: () -> Unit,
+    val onSavePressed: (message: String) -> Unit,
     val weightParams: WeightParams,
     val selectedExtras: () -> List<WeightExtras>,
     val updateExtraSelection: (WeightExtras, Boolean) -> Unit,

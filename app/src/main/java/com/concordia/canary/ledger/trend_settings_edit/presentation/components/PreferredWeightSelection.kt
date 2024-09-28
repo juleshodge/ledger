@@ -13,7 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
 import com.concordia.canary.ledger.ui.theme.ResponsiveAppTheme
@@ -31,7 +33,10 @@ fun PreferredWeightSelection(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Trend Units", style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = stringResource(R.string.trend_units_title_str),
+                style = MaterialTheme.typography.bodyLarge
+            )
 
             LazyColumn {
                 items(availableSelections().size) {
@@ -66,7 +71,8 @@ fun PreferredWeightSelection(
                                     .padding(ResponsiveAppTheme.dimens.medium),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text(text = item.display)
+
+                                Text(text = stringResource(R.string.use_original_option_str))
                                 Checkbox(
                                     checked = checked,
                                     onCheckedChange = { trendSelectionUpdate(item) })
@@ -79,7 +85,6 @@ fun PreferredWeightSelection(
             }
         }
     }
-
 }
 
 @Composable
@@ -88,7 +93,7 @@ fun PreviewPreferredWeightSelection() {
     val lt = listOf(
         TrendSelectedUnits.ConvertTrendUnit(InputUnits.LbUnits),
         TrendSelectedUnits.ConvertTrendUnit(InputUnits.KgUnits),
-        TrendSelectedUnits.OriginalTrendUnit("Keep original")
+        TrendSelectedUnits.OriginalTrendUnit("Keep original a")
     )
     PreferredWeightSelection(
         availableSelections = { lt },

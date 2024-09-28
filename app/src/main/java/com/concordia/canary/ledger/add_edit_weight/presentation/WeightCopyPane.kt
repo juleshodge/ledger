@@ -50,6 +50,7 @@ fun WeightCopyPane(
                     style = MaterialTheme.typography.bodyLarge
                 )
 
+
                 Text(text = "Loading...")
             }
         } else {

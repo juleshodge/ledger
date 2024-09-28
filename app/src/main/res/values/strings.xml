@@ -10,4 +10,9 @@
     <string name="no_entries_to_display_str">No entries to display</string>
     <string name="save_label_str">SAVE</string>
     <string name="recent_entries_copy_label_str">Recent Entries</string>
+    <string name="weight_added_message_str">Weight Added</string>
+    <string name="trend_units_title_str">Trend Units</string>
+    <string name="use_original_option_str">Use Original</string>
+    <string name="trend_settings_label_str">Trend Settings</string>
+    <string name="save_btn_label_str">Save</string>
 </resources>
