@@ -4,21 +4,21 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.Flow
 import java.util.Calendar
 import com.concordia.canary.ledger.core.util.TrendWeightConverter
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSettings
 import com.concordia.canary.ledger.util.Resource
+import com.concordia.canary.ledger.core.domain.model.TrendSettings
+import com.concordia.canary.ledger.core.domain.repository.TrendSettingsRepository
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
 
 class LoadUserWeightsWithSettingsUseCase(
     private val weightTrendRepository: WeightTrendRepository,
     private val trendWeightConverter: TrendWeightConverter,
-    private val settings: TrendSettings
+    private val trendSettingsRepository: TrendSettingsRepository
 ) {
     suspend fun invoke(): Flow<Resource<List<TrendWeight>>> {
-
+        val trendSettings = trendSettingsRepository.getTrendSettings()
         return weightTrendRepository.loadAllActive().map { activeWeightsResource ->
-            transformList(activeWeightsResource, settings)
-
+            transformList(activeWeightsResource, trendSettings)
         }
     }
 

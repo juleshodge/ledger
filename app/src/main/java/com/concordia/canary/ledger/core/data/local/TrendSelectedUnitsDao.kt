@@ -1,4 +1,4 @@
-package com.concordia.canary.ledger.trend_settings_edit.data.local
+package com.concordia.canary.ledger.core.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -10,6 +10,6 @@ interface TrendSelectedUnitsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(selectedUnits: TrendSelectedUnitsEntity)
 
-    @Query("SELECT * FROM ")
-    suspend fun get()
+    @Query("SELECT * FROM trendselectedunitsentity order by modifiedData desc LIMIT 1")
+    suspend fun get() : TrendSelectedUnitsEntity
 }

@@ -45,6 +45,7 @@ fun Navigation(
     val ort = ResponsiveAppTheme.ortMode;
     val context = LocalContext.current
 
+
     LaunchedEffect(key1 = true) {
         generalEventModel.generalEventFlow.collectLatest { value ->
 
@@ -89,27 +90,31 @@ fun Navigation(
         modifier = modifier
     ) {
         composable(ScreenRoutes.TrendSettingsPane.route) {
-            val viewModel: TrendSettingsViewModel = hiltViewModel()
+            val settingsViewModel: TrendSettingsViewModel = hiltViewModel()
+            settingsViewModel.setEventMethod(generalEventModel::sendGeneralEvent)
+
 
             TrendSettingsPane(
-                getSelectableUnits = viewModel::getAvailSelectableUnits,
-                trendSelectionUpdate = viewModel::updateTrendUnitSelection,
-                selectedUnits = { viewModel.state.sel },
+                getSelectableUnits = settingsViewModel::getAvailSelectableUnits,
+                trendSelectionUpdate = settingsViewModel::updateTrendUnitSelection,
+                selectedUnits = { settingsViewModel.state.sel },
 
-                onDaysBackChange = viewModel::onDaysBackChange,
-                daysBackVal = { viewModel.state.daysBack.toString() },
+                onDaysBackChange = settingsViewModel::onDaysBackChange,
+                daysBackVal = { settingsViewModel.state.daysBack.toString() },
                 onSettingsNavBack = {
                     navController.navigate(ScreenRoutes.WeightTrendPane.route) {
                         popUpTo(0)
                     }
                 },
-                ort = ort
+                ort = ort,
+                onSettingsSave = settingsViewModel::onSave
             )
         }
 
         composable(ScreenRoutes.WeightTrendPane.route) {
 
             val viewModel: WeightTrendsViewModel = hiltViewModel()
+
 
             LocalLifecycleOwner.current.lifecycleScope.launch {
                 generalEventModel.generalEventFlow.collectLatest { value ->

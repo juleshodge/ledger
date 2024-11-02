@@ -1,7 +1,7 @@
 package com.concordia.canary.ledger.core.util
 
 import com.concordia.canary.ledger.core.domain.model.InputUnits
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
+import com.concordia.canary.ledger.core.domain.model.TrendSelectedUnits
 import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 
@@ -10,6 +10,19 @@ class TrendWeightConverter(private val simpleWeightConverter: WeightConverter) {
         baseWeight: TrendWeight,
         preferredUnits: TrendSelectedUnits
     ): TrendWeight {
+
+        if(preferredUnits.numericType == 2) {
+            return TrendWeight(
+                baseWeight.id,
+                baseWeight.originalValue,
+                baseWeight.originalWeightUnits,
+                baseWeight.originalWeightUnits,
+                baseWeight.originalValue,
+                baseWeight.observationDate,
+                baseWeight.notes,
+                baseWeight.weightExtras
+            )
+        }
         if (baseWeight.originalWeightUnits
                 .unitNumeric == preferredUnits.subType
         ) {

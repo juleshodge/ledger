@@ -26,11 +26,13 @@ import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrends
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val windowSizeType = rememberWindowSizeType()
+
             LedgerTheme(windowSizeType) {
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
@@ -45,7 +47,7 @@ class MainActivity : ComponentActivity() {
 data class TrendWeightParams(
     val trendState: () -> WeightTrendsState,
     val loadTrendWeights: () -> Unit,
-    val eventSendHandler: (TrendWeightEvent) -> Unit,
+    val eventSendHandler: (TrendWeightEvent) -> Unit
 )
 
 data class WeightParams(

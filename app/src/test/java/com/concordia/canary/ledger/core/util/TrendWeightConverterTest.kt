@@ -5,7 +5,7 @@ import org.junit.Test
 import org.junit.Assert.*
 
 import com.concordia.canary.ledger.core.domain.model.InputUnits
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
+import com.concordia.canary.ledger.core.domain.model.TrendSelectedUnits
 import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeight
 

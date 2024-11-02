@@ -12,7 +12,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.channels.Channel
 
-import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeightsUseCase
 import com.concordia.canary.ledger.weight_trends.presentation.state.WeightTrendsState
 import com.concordia.canary.ledger.util.Resource
 import com.concordia.canary.ledger.weight_trends.domain.model.TrendWeightEvent
@@ -22,7 +21,6 @@ import com.concordia.canary.ledger.weight_trends.domain.use_case.LoadUserWeights
 
 @HiltViewModel
 class WeightTrendsViewModel @Inject constructor(
-    private val loadUserWeightsUseCase: LoadUserWeightsUseCase,
     private val calcTrend: CalculateSevenDayTrendUseCase,
     private val userWeightsWithSettingsUseCase: LoadUserWeightsWithSettingsUseCase
 ) :
@@ -44,8 +42,6 @@ class WeightTrendsViewModel @Inject constructor(
             _trendChannel.send(event)
         }
     }
-
-
 
     fun loadRecentTrendWeights() {
         viewModelScope.launch {

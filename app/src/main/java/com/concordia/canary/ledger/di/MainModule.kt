@@ -19,11 +19,12 @@ import com.concordia.canary.ledger.add_edit_weight.domain.use_case.InactivateWei
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadRecentWeightsUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.LoadSavedWeightUseCase
 import com.concordia.canary.ledger.add_edit_weight.domain.use_case.UpdateSavedWeightUseCase
-import com.concordia.canary.ledger.core.domain.model.InputUnits
 import com.concordia.canary.ledger.core.util.TrendWeightConverter
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSettings
+import com.concordia.canary.ledger.trend_settings_edit.data.repository.TrendSettingsRepositoryImpl
+import com.concordia.canary.ledger.core.domain.repository.TrendSettingsRepository
 import com.concordia.canary.ledger.trend_settings_edit.domain.use_case.LoadSelectableUnitsUseCase
+import com.concordia.canary.ledger.trend_settings_edit.domain.use_case.LoadUserSettingsUseCase
+import com.concordia.canary.ledger.trend_settings_edit.domain.use_case.UpdateUserSettingsUseCase
 import com.concordia.canary.ledger.util.WeightConverter
 import com.concordia.canary.ledger.weight_trends.data.repository.WeightTrendRepositoryImpl
 import com.concordia.canary.ledger.weight_trends.domain.repository.WeightTrendRepository
@@ -69,15 +70,14 @@ object MainModule {
     @Singleton
     fun provideLoadUserWeightsWithSettingsUseCase(
         weightTrendRepository: WeightTrendRepository,
-        trendWeightConverter: TrendWeightConverter
+        trendWeightConverter: TrendWeightConverter,
+        trendSettingsRepository: TrendSettingsRepository
     ): LoadUserWeightsWithSettingsUseCase {
 
-        val trendSettings =
-            TrendSettings(TrendSelectedUnits.ConvertTrendUnit(InputUnits.LbUnits), daysBack = 365)
         return LoadUserWeightsWithSettingsUseCase(
             weightTrendRepository,
             trendWeightConverter = trendWeightConverter,
-            trendSettings
+            trendSettingsRepository
         )
     }
 
@@ -114,6 +114,17 @@ object MainModule {
         return LoadSelectableUnitsUseCase()
     }
 
+    @Provides
+    @Singleton
+    fun provideLoadUserSettingsUseCase(trendSettingsRepository: TrendSettingsRepository): LoadUserSettingsUseCase {
+        return LoadUserSettingsUseCase(trendSettingsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateUserSettingsUseCase(trendSettingsRepository: TrendSettingsRepository): UpdateUserSettingsUseCase {
+        return UpdateUserSettingsUseCase(trendSettingsRepository)
+    }
 
     @Provides
     @Singleton
@@ -137,5 +148,11 @@ object MainModule {
     @Singleton
     fun provideWeightTrendRepository(database: WeightDatabase): WeightTrendRepository {
         return WeightTrendRepositoryImpl(database.dao)
+    }
+
+    @Provides
+    @Singleton
+    fun providesTrendSettingsRepository(database: WeightDatabase): TrendSettingsRepository {
+        return TrendSettingsRepositoryImpl(database.trendSettingsDao, database.selectedUnitsDao)
     }
 }

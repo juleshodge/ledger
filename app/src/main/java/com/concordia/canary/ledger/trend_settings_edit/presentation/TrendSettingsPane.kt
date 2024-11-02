@@ -20,7 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.concordia.canary.ledger.R
 import com.concordia.canary.ledger.core.domain.model.InputUnits
-import com.concordia.canary.ledger.trend_settings_edit.domain.model.TrendSelectedUnits
+import com.concordia.canary.ledger.core.domain.model.TrendSelectedUnits
 import com.concordia.canary.ledger.trend_settings_edit.presentation.components.DaysBack
 import com.concordia.canary.ledger.trend_settings_edit.presentation.components.PreferredWeightSelection
 import com.concordia.canary.ledger.ui.theme.Orientation
@@ -35,6 +35,7 @@ fun TrendSettingsPane(
     onDaysBackChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     onSettingsNavBack: () -> Unit,
+    onSettingsSave: () -> Unit,
     ort: Orientation
 ) {
     val mediumLarge = ResponsiveAppTheme.dimens.mediumLarge
@@ -87,7 +88,7 @@ fun TrendSettingsPane(
                             .fillMaxWidth()
                             .padding(ResponsiveAppTheme.dimens.medium)
                     ) {
-                        Button(onClick = { /*TODO*/ }) {
+                        Button(onClick = { onSettingsSave()}) {
                             Text(text = stringResource(R.string.save_btn_label_str))
                         }
                     }
@@ -133,7 +134,7 @@ fun TrendSettingsPane(
                 modifier = Modifier.padding(ResponsiveAppTheme.dimens.medium)
             )
 
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = { onSettingsSave()}) {
                 Text(text = stringResource(R.string.save_btn_label_str))
             }
         }
@@ -158,6 +159,7 @@ fun PreviewTrendSettingsPane() {
         daysBackVal = { "365" },
         onDaysBackChange = {},
         onSettingsNavBack = {},
-        ort = Orientation.WIDER
+        ort = Orientation.WIDER,
+        onSettingsSave = {}
     )
 }
