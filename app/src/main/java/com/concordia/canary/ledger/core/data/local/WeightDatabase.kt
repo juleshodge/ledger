@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [WeightEntity::class,
         TrendSelectedUnitsEntity::class, TrendSettingsEntity::class],
-    version = 5,
+    version = 6,
     exportSchema = true,
 )
 abstract class WeightDatabase : RoomDatabase() {

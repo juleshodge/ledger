@@ -38,10 +38,10 @@ class WeightConverter {
     }
 
     private fun convertToKg(lbValue: Double): Double {
-        return lbValue * 0.453592
+        return lbValue * 0.45359237
     }
 
     private fun convertToLbs(kgValue: Double): Double {
-        return kgValue * 2.20462
+        return kgValue * 2.2046226218
     }
 }

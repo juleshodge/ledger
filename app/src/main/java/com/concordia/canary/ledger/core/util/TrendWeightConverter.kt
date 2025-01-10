@@ -11,7 +11,8 @@ class TrendWeightConverter(private val simpleWeightConverter: WeightConverter) {
         preferredUnits: TrendSelectedUnits
     ): TrendWeight {
 
-        if(preferredUnits.numericType == 2) {
+
+        if (TrendSelectedUnits.isNoneSelectedOrOriginal(preferredUnits.numericType)) {
             return TrendWeight(
                 baseWeight.id,
                 baseWeight.originalValue,

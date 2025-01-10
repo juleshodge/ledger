@@ -60,7 +60,7 @@ class CalculateSevenDayTrendUseCase(private val converter: WeightConverter) {
                 firstUnits
             ))) % (first.originalValue);
 
-        val vals = applicableWeights.map {
+        val vals = sortedByDescending.map {
             converter.convert(it.originalValue, it.originalWeightUnits, firstUnits)
         }
         val average = vals.average();

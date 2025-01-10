@@ -52,7 +52,9 @@ class WeightTrendsViewModel @Inject constructor(
                         trendsState.copy(isLoading = true)
                     }
 
-                    is Resource.Error -> TODO()
+                    is Resource.Error -> {
+                        trendsState.copy(isLoading = false)
+                    }
                     is Resource.Success -> {
                         val resVal = result.data ?: emptyList()
                         trendsState.copy(

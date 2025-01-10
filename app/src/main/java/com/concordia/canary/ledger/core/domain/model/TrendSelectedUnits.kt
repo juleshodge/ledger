@@ -5,7 +5,10 @@ sealed class TrendSelectedUnits(val numericType: Int, val subType: Int = 0) {
     class OriginalTrendUnit(val display: String) : TrendSelectedUnits(2)
     class ConvertTrendUnit(val targetUnits: InputUnits) :
         TrendSelectedUnits(subType = targetUnits.unitNumeric, numericType = 3)
-    fun fromNumeric(v : Int) : TrendSelectedUnits {
-       return NoneSelected
+
+    companion object {
+        fun isNoneSelectedOrOriginal(numericType: Int): Boolean {
+            return numericType <= 2
+        }
     }
 }
